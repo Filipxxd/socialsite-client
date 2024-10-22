@@ -1,0 +1,38 @@
+import { MantineProvider } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
+import { RouteProvider } from "./router/Router.tsx";
+import Header from "./pages/header/Header";
+import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
+import { createTheme, MantineColorsTuple } from "@mantine/core";
+
+const myColor: MantineColorsTuple = [
+  "#f3edff",
+  "#e0d7fa",
+  "#beabf0",
+  "#9a7de6",
+  "#7c55de",
+  "#693cd9",
+  "#5f30d8",
+  "#4f23c0",
+  "#461eac",
+  "#3b1898",
+];
+
+export const theme = createTheme({
+  colors: {
+    myColor,
+  },
+  primaryColor: "myColor",
+});
+
+export default function App() {
+  return (
+    <MantineProvider theme={theme}>
+      <RouteProvider>
+        <Notifications />
+        <Header />
+      </RouteProvider>
+    </MantineProvider>
+  );
+}
