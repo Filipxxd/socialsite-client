@@ -34,17 +34,15 @@ export default function Login() {
   const handleSubmit = async (values: LoginRequest) => {
     var data = await login(values);
 
-    if (data.isSuccess) {
-      setAuthToken(data.entity.token);
+    setAuthToken(data.token);
 
-      showNotification({
-        title: "Login Successful",
-        message: `Welcome!`,
-        color: "teal",
-      });
+    showNotification({
+      title: "Login Successful",
+      message: `Welcome!`,
+      color: "teal",
+    });
 
-      navigate(HomeRoute);
-    }
+    navigate(HomeRoute);
   };
 
   return (

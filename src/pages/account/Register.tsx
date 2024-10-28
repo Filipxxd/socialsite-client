@@ -8,6 +8,11 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { register, RegisterRequest } from "./api.ts";
+import {
+  czechAlphabetRegex,
+  alphabetNumberRegex,
+  passwordRegex,
+} from "../../_constants/regex.constants.tsx";
 
 export default function Register() {
   const form = useForm<RegisterRequest>({
@@ -24,26 +29,21 @@ export default function Register() {
         if (value.length < 6)
           return "Username must be at least 6 characters long";
 
-        return null;
+        return alphabetNumberRegex.test(value)
+          ? null
+          : "Firstname must contain only characters";
       },
       firstname: (value) => {
-        const alphabetRegex = /^[a-zA-Z]+$/;
-
-        return alphabetRegex.test(value)
+        return czechAlphabetRegex.test(value)
           ? null
           : "Firstname must contain only characters";
       },
       lastname: (value) => {
-        const alphabetRegex = /^[a-zA-Z]+$/;
-
-        return alphabetRegex.test(value)
+        return czechAlphabetRegex.test(value)
           ? null
           : "Lastname must contain only characters";
       },
       password: (value) => {
-        const passwordRegex =
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_-])[A-Za-z\d@$!%*?&_-]{8,}$/;
-
         return passwordRegex.test(value)
           ? null
           : "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character";
