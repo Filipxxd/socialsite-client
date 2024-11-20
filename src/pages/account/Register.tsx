@@ -13,8 +13,13 @@ import {
   alphabetNumberRegex,
   passwordRegex,
 } from "../../_constants/regex.constants.tsx";
+import { showNotification } from "@mantine/notifications";
+import { LoginRoute } from "../../_constants/routes.constants.tsx";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
+  const navigate = useNavigate();
+
   const form = useForm<RegisterRequest>({
     initialValues: {
       username: "",
@@ -58,8 +63,24 @@ export default function Register() {
   });
 
   const handleSubmit = async (values: RegisterRequest) => {
-    var data = await register(values);
-    console.log(data);
+    const response = await register(values);
+
+    if (response.status !== 204){
+      showNotification({
+        title: "Error",
+        message: "Unexpected error occurred at server, please try again later.",
+        color: "red",
+      });
+      return;
+    }
+
+    showNotification({
+      title: "Success",
+      message: "You can now log in.",
+      color: "green",
+    });
+
+    navigate(LoginRoute);
   };
 
   return (

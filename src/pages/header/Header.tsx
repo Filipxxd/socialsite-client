@@ -1,5 +1,5 @@
 import { useDisclosure } from "@mantine/hooks";
-import { Link, useNavigate, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
   Image,
   Group,
@@ -11,24 +11,47 @@ import {
   ScrollArea,
   rem,
 } from "@mantine/core";
-import { useAuth } from "../../shared/AuthContext";
+import { useAuth } from "../../shared/auth/AuthContext";
+import { showNotification } from "@mantine/notifications";
+import { ChatsRoute, LoginRoute, RegisterRoute } from "../../_constants/routes.constants.tsx";
+import { getRefreshToken, setTokens } from "../../shared/auth/tokenManager";
+import { logout as apiLogout } from '../account/api';
 import classes from "./Header.module.css";
 
 export default function Header() {
-  const [menuOpened, { toggle: toggleMenu, close: closeMenu }] =
-    useDisclosure(false);
+  const [menuOpened, { toggle: toggleMenu, close: closeMenu }] = useDisclosure(false);
   const navigate = useNavigate();
+  const { isAuthenticated, fullname, logout: contextLogout } = useAuth();
 
-  const { isAuthenticated, fullname } = useAuth();
+  const handleLogout = async () => {
+    try {
+      const refreshToken = getRefreshToken();
+      if (refreshToken)
+        await apiLogout(refreshToken);
+
+    } catch (error) {
+      console.error('Failed to log out:', error);
+    } finally {
+      setTokens('', '');
+      contextLogout();
+      showNotification({
+        title: "Success",
+        message: "You have been logged out!",
+        color: "green",
+      });
+      navigate(LoginRoute);
+    }
+  };
+
   const navigateAndClose = (path: string) => {
     navigate(path);
     closeMenu();
   };
 
   const NavLinkItem = ({
-    to,
-    children,
-  }: {
+                         to,
+                         children,
+                       }: {
     to: string;
     children: React.ReactNode;
   }) => (
@@ -48,17 +71,20 @@ export default function Header() {
           <Group h="100%" gap={0} visibleFrom="sm">
             <NavLinkItem to="/profile">My Profile</NavLinkItem>
             <NavLinkItem to="/friends">Friendslist</NavLinkItem>
-            <NavLinkItem to="/chats">Chats</NavLinkItem>
+            <NavLinkItem to={ChatsRoute}>Chats</NavLinkItem>
           </Group>
 
           {isAuthenticated ? (
-            <div>Hello {fullname}</div>
+            <>
+              <div>Hello {fullname}</div>
+              <Button onClick={handleLogout}>Logout</Button> {/* Inline logout handler */}
+            </>
           ) : (
             <Group visibleFrom="sm">
-              <Button variant="default" onClick={() => navigate("/login")}>
+              <Button variant="default" onClick={() => navigate(LoginRoute)}>
                 Sign in
               </Button>
-              <Button onClick={() => navigate("/register")}>Sign up</Button>
+              <Button onClick={() => navigate(RegisterRoute)}>Sign up</Button>
             </Group>
           )}
 
@@ -87,10 +113,7 @@ export default function Header() {
           <NavLinkItem to="/academy">Academy</NavLinkItem>
           <Divider my="sm" />
           <Group justify="center" grow pb="xl" px="md">
-            <Button
-              variant="default"
-              onClick={() => navigateAndClose("/login")}
-            >
+            <Button variant="default" onClick={() => navigateAndClose("/login")}>
               Sign in
             </Button>
             <Button onClick={() => navigateAndClose("/register")}>
