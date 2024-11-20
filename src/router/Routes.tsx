@@ -6,7 +6,7 @@ import {
   HomeRoute,
   RegisterRoute,
   LoginRoute,
-  ChatsRoute,
+  ChatsRoute
 } from "../_constants/routes.constants";
 
 interface RouteType {

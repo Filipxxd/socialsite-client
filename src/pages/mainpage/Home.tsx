@@ -8,6 +8,7 @@ export default function Home(){
     const [page, setPage] = useState(1);
     const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
       setPage(value);
+      console.log(event);
     };
 
     return (
