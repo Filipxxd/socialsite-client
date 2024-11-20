@@ -2,11 +2,12 @@ import Home from "../pages/mainpage/Home";
 import Login from "../pages/account/Login";
 import Register from "../pages/account/Register";
 import Chats from "../pages/chats/Chats";
+import CreatePost from "../pages/posts/CreatePost";
 import {
   HomeRoute,
   RegisterRoute,
   LoginRoute,
-  ChatsRoute,
+  ChatsRoute, PostsRoute,
 } from "../_constants/routes.constants";
 
 interface RouteType {
@@ -30,5 +31,9 @@ export const ROUTES: RouteType[] = [
   {
     path: ChatsRoute,
     element: <Chats />,
+  },
+  {
+    path: PostsRoute,
+    element: <CreatePost />,
   },
 ];
