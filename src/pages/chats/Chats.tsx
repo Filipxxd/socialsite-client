@@ -8,20 +8,22 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { useState, useEffect } from "react";
-import { useAuth } from "../../shared/AuthContext";
 import Chat from "./components/Chat.tsx";
-import { getChats, ChatInfo } from "./api.tsx";
+import { getChats, ChatResponse } from "./api.tsx";
 
 const Chats = () => {
-  const [selectedChat, setSelectedChat] = useState<ChatInfo | null>(null);
-  const { token } = useAuth();
-  const [chats, setChats] = useState<ChatInfo[]>([]);
+  const [selectedChat, setSelectedChat] = useState<ChatResponse | null>(null);
+  const [chats, setChats] = useState<ChatResponse[]>([]);
   const theme = useMantineTheme();
 
   useEffect(() => {
     const fetchChats = async () => {
-      const fetchedChats = await getChats(token);
-      setChats(fetchedChats);
+      const response = await getChats();
+
+      if(response.status !== 200)
+        return;
+
+      setChats(response.data);
     };
 
     fetchChats();

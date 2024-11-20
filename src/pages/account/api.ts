@@ -1,17 +1,24 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from "axios";
+import authAxios from "../../shared/auth/authAxios.ts";
 import { API_BASE_URL } from '../../_constants/api.constants';
 
 export interface LoginRequest {
   username: string;
   password: string;
+  rememberMe: boolean;
 }
 
-export const login = async (values: LoginRequest) => {
-    const response = await axios.post(`${API_BASE_URL}/account/login`, {
+export interface LoginResponse {
+  accessToken: string;
+  refreshToken: string;
+}
+
+export const login = async (values: LoginRequest): Promise<AxiosResponse<LoginResponse>> => {
+  return await axios.post(`${API_BASE_URL}/account/login`, {
         Username: values.username, 
-        Password: values.password
+        Password: values.password,
+        RememberMe: values.rememberMe
     });
-    return response.data;
 }
 
 export interface RegisterRequest {
@@ -23,11 +30,16 @@ export interface RegisterRequest {
 }
 
 export const register = async (values: RegisterRequest) => {
-    const response = await axios.post(`${API_BASE_URL}/account/register`, {
+  return await axios.post(`${API_BASE_URL}/account/register`, {
         Username: values.username, 
         FirstName: values.firstname, 
         LastName: values.lastname, 
         Password: values.password
     });
-    return response.data;
+}
+
+export const logout = async (refreshToken: string) => {
+  return await authAxios.post(`${API_BASE_URL}/account/logout`, {
+    Token: refreshToken
+  });
 }
