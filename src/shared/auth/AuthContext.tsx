@@ -1,6 +1,7 @@
 ﻿import React, { createContext, useContext, useState, ReactNode } from "react";
 import { jwtDecode } from 'jwt-decode';
 import { setTokens, loadTokensFromStorage, getAccessToken } from './tokenManager';
+import { ClaimType_Role } from "../../_constants/claimTypes.constants.tsx";
 
 type DecodedToken = {
   userId: string;
@@ -31,7 +32,9 @@ export const useAuth = (): AuthContextProps => {
 
 const decodeTokenAndGetState = (token: string) => {
   const decoded = jwtDecode<DecodedToken>(token);
-  const roles = (decoded.userClaims || []).filter(claim => claim.type.includes('role')).map(claim => claim.value);
+  const roles = (decoded.userClaims || [])
+    .filter(claim => claim.type.includes(ClaimType_Role))
+    .map(claim => claim.value);
 
   return {
     fullname: decoded.fullname,
