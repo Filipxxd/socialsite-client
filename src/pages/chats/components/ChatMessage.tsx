@@ -1,10 +1,10 @@
 import { useMantineTheme } from "@mantine/core";
 import { Paper, Text } from "@mantine/core";
 
-interface ChatMessageProps {
+type ChatMessageProps = {
   message: string;
   fromUser: boolean;
-  timestamp: string; // Přidej timestamp jako string (např. '10:30 AM' nebo '2024-10-20 14:32')
+  timestamp: string;
 }
 
 export default function ChatMessage({

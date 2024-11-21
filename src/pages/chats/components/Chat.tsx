@@ -2,7 +2,7 @@ import { useMantineTheme, CloseButton } from "@mantine/core";
 import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
 
-interface ChatProps {
+type ChatProps = {
   chatName: string;
   onClose: () => void;
 }

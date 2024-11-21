@@ -1,16 +1,15 @@
-﻿// AuthContext.tsx
-import React, { createContext, useContext, useState, ReactNode } from "react";
+﻿import React, { createContext, useContext, useState, ReactNode } from "react";
 import { jwtDecode } from 'jwt-decode';
 import { setTokens, loadTokensFromStorage, getAccessToken } from './tokenManager';
 
-interface DecodedToken {
+type DecodedToken = {
   userId: string;
   fullname: string;
   userClaims: { type: string; value: string }[];
   exp: number;
 }
 
-interface AuthContextProps {
+type AuthContextProps = {
   fullname: string;
   userId: string;
   userClaims: { type: string; value: string }[];

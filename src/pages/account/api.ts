@@ -8,7 +8,7 @@ export interface LoginRequest {
   rememberMe: boolean;
 }
 
-export interface LoginResponse {
+export type LoginResponse = {
   accessToken: string;
   refreshToken: string;
 }
@@ -21,7 +21,7 @@ export const login = async (values: LoginRequest): Promise<AxiosResponse<LoginRe
     });
 }
 
-export interface RegisterRequest {
+export type RegisterRequest = {
   username: string;
   firstname: string;
   lastname: string;
