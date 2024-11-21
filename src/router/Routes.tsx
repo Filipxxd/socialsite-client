@@ -9,26 +9,32 @@ import {
   ChatsRoute
 } from "../_constants/routes.constants";
 
-interface RouteType {
+type RouteType = {
   path: string;
-  element: JSX.Element;
+  requiresAuth: boolean;
+  requiredRoles?: string[];
+  component: JSX.Element;
 }
 
 export const ROUTES: RouteType[] = [
   {
     path: HomeRoute,
-    element: <Home />,
+    requiresAuth: true,
+    component: <Home />,
   },
   {
     path: RegisterRoute,
-    element: <Register />,
+    requiresAuth: false,
+    component: <Register />,
   },
   {
     path: LoginRoute,
-    element: <Login />,
+    requiresAuth: false,
+    component: <Login />,
   },
   {
     path: ChatsRoute,
-    element: <Chats />,
+    requiresAuth: true,
+    component: <Chats />,
   },
 ];
