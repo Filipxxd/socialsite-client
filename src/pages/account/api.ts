@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import authAxios from "../../shared/auth/authAxios.ts";
 import { API_BASE_URL } from '../../_constants/api.constants';
 
-export interface LoginRequest {
+export type LoginRequest = {
   username: string;
   password: string;
   rememberMe: boolean;
