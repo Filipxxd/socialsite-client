@@ -50,9 +50,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [state, setState] = useState(() => {
     loadTokensFromStorage();
     const accessToken = getAccessToken();
-    if (accessToken) {
+    if (accessToken)
       return decodeTokenAndGetState(accessToken);
-    }
+
     return {
       fullname: '',
       userId: '',
@@ -63,11 +63,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   });
 
   useEffect(() => {
-    const handleLogout = () => logout();
-    subscribe('logout', handleLogout);
+    subscribe('logout', logout);
 
     return () => {
-      unsubscribe('logout', handleLogout);
+      unsubscribe('logout', logout);
     };
   }, []);
 
@@ -78,6 +77,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const logout = () => {
     setTokens('', '');
+
     setState({
       fullname: '',
       userId: '',

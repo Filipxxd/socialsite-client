@@ -10,36 +10,29 @@ const authAxiosInstance = axios.create({
   baseURL: API_BASE_URL
 });
 
-authAxiosInstance.interceptors.request.use(
-  async (config) => {
-    let token = getAccessToken();
+let isRefreshing = false;
+let refreshSubscribers: ((newToken: string) => void)[] = [];
 
-    if (token && isAccessTokenExpired(token)) {
-      token = await refreshAccessToken();
+const onRefreshed = (newToken: string) => {
+  refreshSubscribers.forEach((callback) => callback(newToken));
+  refreshSubscribers = [];
+};
 
-      if (!token) {
-        emit('logout'); // Emit logout event
-        return Promise.reject("Session expired");
-      }
-    }
-
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
-    }
-
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+const subscribeTokenRefresh
+  = (callback: (newToken: string) => void) => refreshSubscribers.push(callback);
 
 const refreshAccessToken = async (): Promise<string | null> => {
   const refreshToken = getRefreshToken();
+
   if (!refreshToken) {
     emit('logout');
     return Promise.reject("Refresh token is missing");
   }
+
+  if (isRefreshing)
+    return new Promise((resolve) => subscribeTokenRefresh(resolve));
+
+  isRefreshing = true;
 
   try {
     const response = await axios.post(`${API_BASE_URL}/account/refresh-token`, {
@@ -54,11 +47,38 @@ const refreshAccessToken = async (): Promise<string | null> => {
     const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
     setTokens(newAccessToken, newRefreshToken);
 
+    onRefreshed(newAccessToken);
+
     return newAccessToken;
   } catch (err) {
     emit('logout');
     return Promise.reject(err);
+  } finally {
+    isRefreshing = false;
   }
 };
+
+authAxiosInstance.interceptors.request.use(
+  async (config) => {
+    let token = getAccessToken();
+
+    if (token && isAccessTokenExpired(token)) {
+      token = await refreshAccessToken();
+
+      if (!token) {
+        emit('logout');
+        return Promise.reject("Session expired");
+      }
+    }
+
+    if (token)
+      config.headers['Authorization'] = `Bearer ${token}`;
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export default authAxiosInstance;
