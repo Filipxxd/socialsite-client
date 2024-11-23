@@ -1,7 +1,8 @@
-﻿import React, { createContext, useContext, useState, ReactNode } from "react";
+﻿import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { jwtDecode } from 'jwt-decode';
 import { setTokens, loadTokensFromStorage, getAccessToken } from './tokenManager';
 import { ClaimType_Role } from "../../_constants/claimTypes.constants.tsx";
+import { subscribe, unsubscribe } from './authEventEmitter.ts';
 
 type DecodedToken = {
   userId: string;
@@ -60,6 +61,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       isAuthenticated: false,
     };
   });
+
+  useEffect(() => {
+    const handleLogout = () => logout();
+    subscribe('logout', handleLogout);
+
+    return () => {
+      unsubscribe('logout', handleLogout);
+    };
+  }, []);
 
   const login = (accessToken: string, refreshToken: string) => {
     setTokens(accessToken, refreshToken);
