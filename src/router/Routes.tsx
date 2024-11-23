@@ -6,8 +6,11 @@ import {
   HomeRoute,
   RegisterRoute,
   LoginRoute,
-  ChatsRoute
+  ChatsRoute,
+  FriendsRoute, MyProfileRoute
 } from "../_constants/routes.constants";
+import Friends from "../pages/friends/Friends.tsx";
+import MyProfile from "../pages/profile/MyProfile.tsx";
 
 type RouteType = {
   path: string;
@@ -17,11 +20,28 @@ type RouteType = {
 }
 
 export const ROUTES: RouteType[] = [
+  // Authorized routes
   {
     path: HomeRoute,
     requiresAuth: true,
     component: <Home />,
   },
+  {
+    path: FriendsRoute,
+    requiresAuth: true,
+    component: <Friends />,
+  },
+  {
+    path: ChatsRoute,
+    requiresAuth: true,
+    component: <Chats />,
+  },
+  {
+    path: MyProfileRoute,
+    requiresAuth: true,
+    component: <MyProfile />,
+  },
+  // Public routes
   {
     path: RegisterRoute,
     requiresAuth: false,
@@ -31,10 +51,5 @@ export const ROUTES: RouteType[] = [
     path: LoginRoute,
     requiresAuth: false,
     component: <Login />,
-  },
-  {
-    path: ChatsRoute,
-    requiresAuth: true,
-    component: <Chats />,
-  },
+  }
 ];
