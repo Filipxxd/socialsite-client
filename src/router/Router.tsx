@@ -9,7 +9,10 @@ type CustomRouterProviderProps = {
 
 export const RouteProvider: React.FC<CustomRouterProviderProps> = ({ children}) => {
   return (
-    <BrowserRouter>
+    <BrowserRouter future={{
+      v7_startTransition: true,
+      v7_relativeSplatPath: true,
+    }}>
       {children}
       <Routes>
         {ROUTES.map((route) => (
