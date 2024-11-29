@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "./AuthContext";
-import { LoginRoute } from "../_constants/routes.constants";
+import { useAuth } from "../shared/auth/AuthContext.tsx";
+import { HomeRoute, LoginRoute } from "../_constants/routes.constants.tsx";
 
-interface ProtectedRouteProps {
+type AuthorizedRoute = {
   children: ReactNode;
   requiredRoles?: string[];
 }
@@ -11,18 +11,16 @@ interface ProtectedRouteProps {
 export const ProtectedRoute = ({
   children,
   requiredRoles,
-}: ProtectedRouteProps) => {
+}: AuthorizedRoute) => {
   const { isAuthenticated, roles } = useAuth();
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated)
     return <Navigate to={LoginRoute} replace />;
-  }
 
   if (requiredRoles && requiredRoles.length > 0) {
     const hasRequiredRole = requiredRoles.some((role) => roles.includes(role));
-    if (!hasRequiredRole) {
-      return <Navigate to="/unauthorized" replace />;
-    }
+    if (!hasRequiredRole)
+      return <Navigate to={HomeRoute} replace />;
   }
 
   return <>{children}</>;

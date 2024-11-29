@@ -6,29 +6,50 @@ import {
   HomeRoute,
   RegisterRoute,
   LoginRoute,
-  ChatsRoute
+  ChatsRoute,
+  FriendsRoute, MyProfileRoute
 } from "../_constants/routes.constants";
+import Friends from "../pages/friends/Friends.tsx";
+import MyProfile from "../pages/profile/MyProfile.tsx";
 
-interface RouteType {
+type RouteType = {
   path: string;
-  element: JSX.Element;
+  requiresAuth: boolean;
+  requiredRoles?: string[];
+  component: JSX.Element;
 }
 
 export const ROUTES: RouteType[] = [
+  // Authorized routes
   {
     path: HomeRoute,
-    element: <Home />,
+    requiresAuth: true,
+    component: <Home />,
   },
   {
-    path: RegisterRoute,
-    element: <Register />,
-  },
-  {
-    path: LoginRoute,
-    element: <Login />,
+    path: FriendsRoute,
+    requiresAuth: true,
+    component: <Friends />,
   },
   {
     path: ChatsRoute,
-    element: <Chats />,
+    requiresAuth: true,
+    component: <Chats />,
   },
+  {
+    path: MyProfileRoute,
+    requiresAuth: true,
+    component: <MyProfile />,
+  },
+  // Public routes
+  {
+    path: RegisterRoute,
+    requiresAuth: false,
+    component: <Register />,
+  },
+  {
+    path: LoginRoute,
+    requiresAuth: false,
+    component: <Login />,
+  }
 ];

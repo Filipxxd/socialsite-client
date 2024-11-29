@@ -8,17 +8,25 @@ import {
   Divider,
   Box,
   Drawer,
-  ScrollArea,
-  rem,
+  Text,
 } from "@mantine/core";
 import { useAuth } from "../../shared/auth/AuthContext";
 import { showNotification } from "@mantine/notifications";
-import { ChatsRoute, LoginRoute, RegisterRoute } from "../../_constants/routes.constants.tsx";
+import {
+  ChatsRoute,
+  LoginRoute,
+  RegisterRoute,
+  FriendsRoute,
+  HomeRoute,
+  MyProfileRoute,
+} from "../../_constants/routes.constants.tsx";
 import { getRefreshToken, setTokens } from "../../shared/auth/tokenManager";
-import { logout as apiLogout } from '../account/api';
+import { logout as apiLogout } from "../account/api";
+import { FaUserFriends, FaUserCircle } from "react-icons/fa";
+import { IoChatbox } from "react-icons/io5";
 import classes from "./Header.module.css";
 
-export default function Header() {
+function Header() {
   const [menuOpened, { toggle: toggleMenu, close: closeMenu }] = useDisclosure(false);
   const navigate = useNavigate();
   const { isAuthenticated, fullname, logout: contextLogout } = useAuth();
@@ -26,13 +34,13 @@ export default function Header() {
   const handleLogout = async () => {
     try {
       const refreshToken = getRefreshToken();
-      if (refreshToken)
+      if (refreshToken) {
         await apiLogout(refreshToken);
-
+      }
     } catch (error) {
-      console.error('Failed to log out:', error);
+      console.error("Logout error:", error);
     } finally {
-      setTokens('', '');
+      setTokens("", "");
       contextLogout();
       showNotification({
         title: "Success",
@@ -48,53 +56,78 @@ export default function Header() {
     closeMenu();
   };
 
-  const NavLinkItem = ({
-                         to,
-                         children,
-                       }: {
-    to: string;
-    children: React.ReactNode;
-  }) => (
-    <NavLink to={to} className={classes.link} onClick={closeMenu}>
-      {children}
+  const NavLinkMobile = ({ to, children, label }: { to: string; children: React.ReactNode; label: string }) => (
+    <NavLink to={to} style={{ textDecoration: 'none' }}>
+      <Box
+        onClick={closeMenu}
+        px="md"
+        py="lg"
+        display="flex"
+        align-items="center"
+        className={classes.navLink}
+      >
+        <Box mr="md" display="flex" align-items="middle" color="inherit">{children}</Box>
+        <Text size="lg" w={500}>{label}</Text>
+      </Box>
     </NavLink>
+  );
+
+  const NavLinkDesktop = ({ to, children, label }: { to: string; children: React.ReactNode; label: string }) => (
+    <Box onClick={() => navigate(to)} className={classes.navLink}>
+      <Box mr="md" display="flex" align-items="middle">{children}</Box>
+      <Text size="md">{label}</Text>
+    </Box>
   );
 
   return (
     <Box mb={20}>
       <header className={classes.header}>
-        <Group justify="space-between" h="100%">
-          <Link to="/">
-            <Image src="/logo.svg" height={45} />
-          </Link>
+        <Link to={HomeRoute}>
+          <Image src="/logo.svg" w={45} />
+        </Link>
 
-          <Group h="100%" gap={0} visibleFrom="sm">
-            <NavLinkItem to="/profile">My Profile</NavLinkItem>
-            <NavLinkItem to="/friends">Friendslist</NavLinkItem>
-            <NavLinkItem to={ChatsRoute}>Chats</NavLinkItem>
+        {isAuthenticated && (
+          <Group visibleFrom="md">
+            <NavLinkDesktop to={MyProfileRoute} label="Profile">
+              <FaUserCircle />
+            </NavLinkDesktop>
+            <NavLinkDesktop to={FriendsRoute} label="Friends">
+              <FaUserFriends />
+            </NavLinkDesktop>
+            <NavLinkDesktop to={ChatsRoute} label="Chats">
+              <IoChatbox />
+            </NavLinkDesktop>
           </Group>
+        )}
 
+        <Group visibleFrom={"md"}>
           {isAuthenticated ? (
-            <>
-              <div>Hello {fullname}</div>
-              <Button onClick={handleLogout}>Logout</Button> {/* Inline logout handler */}
-            </>
+            <Box display="flex" align-items="middle">
+              <Box mr="sm" display="flex" align-items="middle">
+                <span>
+                  {fullname}
+                </span>
+              </Box>
+              <Button onClick={handleLogout}>Logout</Button>
+            </Box>
           ) : (
-            <Group visibleFrom="sm">
-              <Button variant="default" onClick={() => navigate(LoginRoute)}>
+            <>
+              <Button onClick={() => navigate(LoginRoute)}>
                 Sign in
               </Button>
-              <Button onClick={() => navigate(RegisterRoute)}>Sign up</Button>
-            </Group>
+              <Button onClick={() => navigate(RegisterRoute)}>
+                Sign up
+              </Button>
+            </>
           )}
-
-          <Burger
-            opened={menuOpened}
-            onClick={toggleMenu}
-            aria-label="Toggle navigation"
-            hiddenFrom="sm"
-          />
         </Group>
+
+        <Burger
+          opened={menuOpened}
+          onClick={toggleMenu}
+          aria-label="Toggle menu"
+          hiddenFrom="md"
+        />
       </header>
 
       <Drawer
@@ -102,26 +135,48 @@ export default function Header() {
         onClose={closeMenu}
         size="100%"
         padding="md"
-        title="Navigation"
-        hiddenFrom="sm"
+        title={isAuthenticated ? fullname : null}
+        hiddenFrom="md"
+        closeButtonProps={{ size: "xl" }}
         zIndex={1000000}
       >
-        <ScrollArea h={`calc(100vh - ${rem(80)})`} mx="-md">
-          <Divider my="sm" />
-          <NavLinkItem to="/">Home</NavLinkItem>
-          <NavLinkItem to="/learn">Learn</NavLinkItem>
-          <NavLinkItem to="/academy">Academy</NavLinkItem>
-          <Divider my="sm" />
-          <Group justify="center" grow pb="xl" px="md">
-            <Button variant="default" onClick={() => navigateAndClose("/login")}>
-              Sign in
-            </Button>
-            <Button onClick={() => navigateAndClose("/register")}>
-              Sign up
-            </Button>
-          </Group>
-        </ScrollArea>
+        <Divider />
+
+        {isAuthenticated && (
+          <>
+            <NavLinkMobile to={MyProfileRoute} label="My Profile">
+              <FaUserCircle />
+            </NavLinkMobile>
+
+            <NavLinkMobile to={FriendsRoute} label="Friends">
+              <FaUserFriends />
+            </NavLinkMobile>
+
+            <NavLinkMobile to={ChatsRoute} label="Chats">
+              <IoChatbox />
+            </NavLinkMobile>
+
+            <Divider my="sm" />
+          </>
+        )}
+
+        <Group justify="center" grow pb="xl" px="md">
+          {isAuthenticated ? (
+            <Button onClick={handleLogout}>Logout</Button>
+          ) : (
+            <>
+              <Button variant="default" onClick={() => navigateAndClose(LoginRoute)}>
+                Sign in
+              </Button>
+              <Button onClick={() => navigateAndClose(RegisterRoute)}>
+                Sign up
+              </Button>
+            </>
+          )}
+        </Group>
       </Drawer>
     </Box>
   );
 }
+
+export default Header;

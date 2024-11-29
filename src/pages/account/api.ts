@@ -2,13 +2,13 @@ import axios, { AxiosResponse } from "axios";
 import authAxios from "../../shared/auth/authAxios.ts";
 import { API_BASE_URL } from '../../_constants/api.constants';
 
-export interface LoginRequest {
+export type LoginRequest = {
   username: string;
   password: string;
   rememberMe: boolean;
 }
 
-export interface LoginResponse {
+export type LoginResponse = {
   accessToken: string;
   refreshToken: string;
 }
@@ -21,7 +21,7 @@ export const login = async (values: LoginRequest): Promise<AxiosResponse<LoginRe
     });
 }
 
-export interface RegisterRequest {
+export type RegisterRequest = {
   username: string;
   firstname: string;
   lastname: string;
