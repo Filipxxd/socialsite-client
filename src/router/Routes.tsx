@@ -3,37 +3,61 @@ import Login from "../pages/account/Login";
 import Register from "../pages/account/Register";
 import Chats from "../pages/chats/Chats";
 import CreatePost from "../pages/posts/CreatePost";
+import Friends from "../pages/friends/Friends.tsx";
+import MyProfile from "../pages/profile/MyProfile.tsx";
 import {
   HomeRoute,
   RegisterRoute,
   LoginRoute,
-  ChatsRoute, PostsRoute,
+  ChatsRoute,
+  FriendsRoute,
+  PostsRoute,
+  MyProfileRoute
 } from "../_constants/routes.constants";
 
-interface RouteType {
+type RouteType = {
   path: string;
-  element: JSX.Element;
+  requiresAuth: boolean;
+  requiredRoles?: string[];
+  component: JSX.Element;
 }
 
 export const ROUTES: RouteType[] = [
+  // Authorized routes
   {
     path: HomeRoute,
-    element: <Home />,
+    requiresAuth: true,
+    component: <Home />,
   },
   {
-    path: RegisterRoute,
-    element: <Register />,
-  },
-  {
-    path: LoginRoute,
-    element: <Login />,
+    path: FriendsRoute,
+    requiresAuth: true,
+    component: <Friends />,
   },
   {
     path: ChatsRoute,
-    element: <Chats />,
+    requiresAuth: true,
+    component: <Chats />,
+  },
+  {
+    path: MyProfileRoute,
+    requiresAuth: true,
+    component: <MyProfile />,
   },
   {
     path: PostsRoute,
-    element: <CreatePost />,
+    requiresAuth: true,
+    component: <CreatePost />,
   },
+  // Public routes
+  {
+    path: RegisterRoute,
+    requiresAuth: false,
+    component: <Register />,
+  },
+  {
+    path: LoginRoute,
+    requiresAuth: false,
+    component: <Login />,
+  }
 ];

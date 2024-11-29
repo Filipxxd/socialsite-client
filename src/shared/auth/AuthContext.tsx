@@ -1,16 +1,17 @@
-﻿// AuthContext.tsx
-import React, { createContext, useContext, useState, ReactNode } from "react";
+﻿import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { jwtDecode } from 'jwt-decode';
 import { setTokens, loadTokensFromStorage, getAccessToken } from './tokenManager';
+import { ClaimType_Role } from "../../_constants/claimTypes.constants.tsx";
+import { subscribe, unsubscribe } from './authEventEmitter.ts';
 
-interface DecodedToken {
+type DecodedToken = {
   userId: string;
   fullname: string;
   userClaims: { type: string; value: string }[];
   exp: number;
 }
 
-interface AuthContextProps {
+type AuthContextProps = {
   fullname: string;
   userId: string;
   userClaims: { type: string; value: string }[];
@@ -32,7 +33,9 @@ export const useAuth = (): AuthContextProps => {
 
 const decodeTokenAndGetState = (token: string) => {
   const decoded = jwtDecode<DecodedToken>(token);
-  const roles = (decoded.userClaims || []).filter(claim => claim.type.includes('role')).map(claim => claim.value);
+  const roles = (decoded.userClaims || [])
+    .filter(claim => claim.type.includes(ClaimType_Role))
+    .map(claim => claim.value);
 
   return {
     fullname: decoded.fullname,
@@ -47,9 +50,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [state, setState] = useState(() => {
     loadTokensFromStorage();
     const accessToken = getAccessToken();
-    if (accessToken) {
+    if (accessToken)
       return decodeTokenAndGetState(accessToken);
-    }
+
     return {
       fullname: '',
       userId: '',
@@ -59,6 +62,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
   });
 
+  useEffect(() => {
+    subscribe('logout', logout);
+
+    return () => {
+      unsubscribe('logout', logout);
+    };
+  }, []);
+
   const login = (accessToken: string, refreshToken: string) => {
     setTokens(accessToken, refreshToken);
     setState(decodeTokenAndGetState(accessToken));
@@ -66,6 +77,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const logout = () => {
     setTokens('', '');
+
     setState({
       fullname: '',
       userId: '',

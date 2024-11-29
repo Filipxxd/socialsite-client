@@ -1,7 +1,7 @@
 import authAxiosInstance from '../../shared/auth/authAxios.ts';
 import { AxiosResponse } from "axios";
 
-export interface ChatResponse {
+export type ChatResponse = {
   id: number;
   name: string;
   isDirect: boolean;

@@ -10,7 +10,7 @@ import { red } from '@mui/material/colors';
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
 import FlagIcon from '@mui/icons-material/Flag';
 
-interface PostProps {
+type PostProps = {
   postId: number,
   userPicturePath: string,
   userName: string,
