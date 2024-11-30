@@ -25,9 +25,9 @@ export type FriendRequest = {
   receiverId: number;
 }
 
-export const sendFriendRequest = async (values: FriendRequest): Promise<AxiosResponse> => {
+export const sendFriendRequest = async (data: FriendRequest): Promise<AxiosResponse> => {
   return await authAxiosInstance.post('/friends/send-request', {
-    ReceiverId: values.receiverId
+    ReceiverId: data.receiverId
   });
 };
 
@@ -36,10 +36,10 @@ export type ResolveFriendRequest = {
   accept: boolean;
 }
 
-export const resolveFriendRequest = async (values: ResolveFriendRequest): Promise<AxiosResponse> => {
+export const resolveFriendRequest = async (data: ResolveFriendRequest): Promise<AxiosResponse> => {
   return await authAxiosInstance.put('/friends/resolve-request', {
-    Id: values.friendRequestId,
-    IsAccepted: values.accept
+    Id: data.friendRequestId,
+    IsAccepted: data.accept
   });
 };
 

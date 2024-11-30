@@ -13,11 +13,11 @@ export type CreatePostRequest = {
     visibility: PostVisibility;
 }
 
-export const createPost = async (values: CreatePostRequest) => {
+export const createPost = async (data: CreatePostRequest) => {
     return await authAxiosInstance.post(`${API_BASE_URL}/posts`, {
-        Content: values.content,
-        Visibility: values.visibility,
-        Images: values.images
+        Content: data.content,
+        Visibility: data.visibility,
+        Images: data.images
     });
 }
 
@@ -25,11 +25,11 @@ export type UpdatePostRequest = CreatePostRequest & {
     postId: number;
 }
 
-export const updatePost = async (values: UpdatePostRequest) => {
-    return await authAxiosInstance.put(`${API_BASE_URL}/posts/${values.postId}`, {
-        Content: values.content,
-        Visibility: values.visibility,
-        Images: values.images
+export const updatePost = async (data: UpdatePostRequest) => {
+    return await authAxiosInstance.put(`${API_BASE_URL}/posts/${data.postId}`, {
+        Content: data.content,
+        Visibility: data.visibility,
+        Images: data.images
     });
 }
 

@@ -13,11 +13,11 @@ export type LoginResponse = {
   refreshToken: string;
 }
 
-export const login = async (values: LoginRequest): Promise<AxiosResponse<LoginResponse>> => {
+export const login = async (data: LoginRequest): Promise<AxiosResponse<LoginResponse>> => {
   return await axios.post(`${API_BASE_URL}/account/login`, {
-        Username: values.username, 
-        Password: values.password,
-        RememberMe: values.rememberMe
+        Username: data.username,
+        Password: data.password,
+        RememberMe: data.rememberMe
     });
 }
 
@@ -29,12 +29,12 @@ export type RegisterRequest = {
   passwordConfirm: string;
 }
 
-export const register = async (values: RegisterRequest) => {
+export const register = async (data: RegisterRequest) => {
   return await axios.post(`${API_BASE_URL}/account/register`, {
-        Username: values.username, 
-        FirstName: values.firstname, 
-        LastName: values.lastname, 
-        Password: values.password
+        Username: data.username,
+        FirstName: data.firstname,
+        LastName: data.lastname,
+        Password: data.password
     });
 }
 
