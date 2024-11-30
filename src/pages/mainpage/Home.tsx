@@ -3,6 +3,7 @@ import Typography from '@mui/material/Typography';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import Post from "./components/Post.tsx";
+import UserSearchBar from "./components/UserSearchBar.tsx";
 
 export default function Home(){
     const [page, setPage] = useState(1);
@@ -13,6 +14,7 @@ export default function Home(){
 
     return (
         <>
+          <UserSearchBar />
             <Post
              postId={7}
              userName={'Adolf Neadolf'}
