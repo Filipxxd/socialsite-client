@@ -6,6 +6,7 @@ import {
   Button,
   Group, Checkbox
 } from "@mantine/core";
+import { useEffect } from "react";
 import { useForm } from "@mantine/form";
 import { useNavigate } from "react-router-dom";
 import { login as loginUser, LoginRequest } from "./api";
@@ -14,8 +15,13 @@ import { showNotification } from "@mantine/notifications";
 import { useAuth } from "../../shared/auth/AuthContext";
 
 export default function Login() {
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated)
+      navigate(HomeRoute);
+  });
 
   const form = useForm<LoginRequest>({
     initialValues: {

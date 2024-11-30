@@ -14,11 +14,19 @@ import {
   passwordRegex,
 } from "../../_constants/regex.constants.tsx";
 import { showNotification } from "@mantine/notifications";
-import { LoginRoute } from "../../_constants/routes.constants.tsx";
+import { HomeRoute, LoginRoute } from "../../_constants/routes.constants.tsx";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useAuth } from "../../shared/auth/AuthContext";
 
 export default function Register() {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (isAuthenticated)
+      navigate(HomeRoute);
+  });
 
   const form = useForm<RegisterRequest>({
     initialValues: {
