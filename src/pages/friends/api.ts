@@ -12,7 +12,7 @@ export const getFriends = async (): Promise<AxiosResponse<FriendResponse[]>> => 
 };
 
 export type FriendRequestResponse = {
-  id: number;
+  friendRequestId: number;
   senderFullname: string;
   sentAt: Date;
 }

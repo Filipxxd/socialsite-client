@@ -13,7 +13,7 @@ export type MyProfileResponse = {
 };
 
 export const getProfileInfo = async (): Promise<AxiosResponse<MyProfileResponse>> => {
-  return await authAxiosInstance.get<MyProfileResponse>('/user/get-profile');
+  return await authAxiosInstance.get<MyProfileResponse>('/user/my-profile');
 };
 
 export const updateProfileInfo = async (data: MyProfileResponse): Promise<AxiosResponse> => {

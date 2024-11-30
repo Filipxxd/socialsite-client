@@ -74,7 +74,7 @@ const Friends = () => {
         await fetchFriends();
       }
       setFriendRequests((currentRequests) =>
-        currentRequests.filter((request) => request.id !== requestId)
+        currentRequests.filter((request) => request.friendRequestId !== requestId)
       );
     }
   };
