@@ -1,7 +1,7 @@
-interface ImportMetaEnv {
+type ImportMetaEnv = {
   VITE_API_URL: string;
 }
 
-interface ImportMeta {
+type ImportMeta = {
   readonly env: ImportMetaEnv;
 }
