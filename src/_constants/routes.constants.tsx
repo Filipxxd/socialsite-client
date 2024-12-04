@@ -5,3 +5,4 @@ export const ChatsRoute = "/chats";
 export const PostsRoute = "/posts";
 export const FriendsRoute = "/friends";
 export const MyProfileRoute = "/profile";
+export const ReportsRoute = "/reports";
