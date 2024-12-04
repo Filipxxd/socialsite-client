@@ -1,5 +1,6 @@
 import axios from "axios";
 import {API_BASE_URL} from "../../_constants/api.constants.tsx";
+import authAxiosInstance from "../../shared/auth/authAxios.ts";
 
 export enum PostVisibility {
     Anyone = 'Anyone',
@@ -49,6 +50,12 @@ export interface CommentResponse{
     dateCreated: Date;
 }
 
+export type PaginatedResponse = {
+    totalRecords: number;
+    totalPages: number;
+    items: PostResponse[];
+}
+
 export interface PostResponse{
     postId: number;
     content: string;
@@ -58,7 +65,11 @@ export interface PostResponse{
     comments: CommentResponse[];
 }
 
-export const getAllMainPagePosts = async () => {
-    // TODO: Use AuthAxiosInstance
-    return await axios.get<PostResponse[]>(`${API_BASE_URL}/posts`);
+export type PaginationRequest = {
+    pageNumber: number;
+    pageSize: number;
+}
+
+export const getAllMainPagePosts = async (data: PaginationRequest) => {
+    return await authAxiosInstance.get<PaginatedResponse>(`/posts?pageNumber=${data.pageNumber}&pageSize=${data.pageSize}`);
 }
