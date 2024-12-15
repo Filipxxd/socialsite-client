@@ -19,7 +19,7 @@ import {
   FriendsRoute,
   HomeRoute,
   MyProfileRoute,
-} from "../../_constants/routes.constants.tsx";
+} from "../../_constants/routes.constants.ts";
 import { getRefreshToken, setTokens } from "../../shared/auth/tokenManager";
 import { logout as apiLogout } from "../account/api";
 import { FaUserFriends, FaUserCircle } from "react-icons/fa";

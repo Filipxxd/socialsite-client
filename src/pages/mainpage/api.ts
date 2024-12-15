@@ -1,6 +1,6 @@
 ﻿import { AxiosResponse } from "axios";
 import authAxiosInstance from "../../shared/auth/authAxios.ts";
-import { API_BASE_URL } from "../../_constants/api.constants.tsx";
+import { API_BASE_URL } from "../../_constants/api.constants.ts";
 
 export type SearchUserResponse = {
   username: string;

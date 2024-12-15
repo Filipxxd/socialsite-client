@@ -1,7 +1,7 @@
 ﻿import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { jwtDecode } from 'jwt-decode';
 import { setTokens, loadTokensFromStorage, getAccessToken } from './tokenManager';
-import { ClaimType_Role } from "../../_constants/claimTypes.constants.tsx";
+import { ClaimType_Role } from "../../_constants/claimTypes.constants.ts";
 import { subscribe, unsubscribe } from './authEventEmitter.ts';
 
 type DecodedToken = {
