@@ -1,4 +1,3 @@
-import {API_BASE_URL} from "../../_constants/api.constants.tsx";
 import authAxiosInstance from "../../shared/auth/authAxios.ts";
 
 export enum PostVisibility {
@@ -14,7 +13,7 @@ export type CreatePostRequest = {
 }
 
 export const createPost = async (data: CreatePostRequest) => {
-    return await authAxiosInstance.post(`${API_BASE_URL}/posts`, {
+    return await authAxiosInstance.post(`/posts`, {
         Content: data.content,
         Visibility: data.visibility,
         Images: data.images
@@ -26,7 +25,7 @@ export type UpdatePostRequest = CreatePostRequest & {
 }
 
 export const updatePost = async (data: UpdatePostRequest) => {
-    return await authAxiosInstance.put(`${API_BASE_URL}/posts/${data.postId}`, {
+    return await authAxiosInstance.put(`/posts/${data.postId}`, {
         Content: data.content,
         Visibility: data.visibility,
         Images: data.images
@@ -34,7 +33,7 @@ export const updatePost = async (data: UpdatePostRequest) => {
 }
 
 export const deletePost = async (postId: number) => {
-    return await authAxiosInstance.delete(`${API_BASE_URL}/posts`, {
+    return await authAxiosInstance.delete(`/posts`, {
         params: { postId },
     });
 }
@@ -55,6 +54,17 @@ export type PostResponse = {
     comments: CommentResponse[];
 }
 
-export const getAllMainPagePosts = async () => {
-    return await authAxiosInstance.get<PostResponse[]>(`${API_BASE_URL}/posts`);
+export type PaginatedResponse = {
+  totalRecords: number;
+  totalPages: number;
+  items: PostResponse[];
+}
+
+export type PaginationRequest = {
+  pageNumber: number;
+  pageSize: number;
+}
+
+export const getAllMainPagePosts = async (data: PaginationRequest) => {
+  return await authAxiosInstance.get<PaginatedResponse>(`/posts?pageNumber=${data.pageNumber}&pageSize=${data.pageSize}`);
 }
