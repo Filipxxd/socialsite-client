@@ -4,6 +4,7 @@ import { useDebouncedValue } from '@mantine/hooks';
 import { Paper } from '@mui/material';
 import { getFriends, SearchUserResponse } from '../api';
 import { useNavigate } from 'react-router-dom';
+import { UserProfileRoute } from "../../../_constants/routes.constants.ts";
 
 function SearchBar() {
   const [searchValue, setSearchValue] = useState('');
@@ -32,8 +33,8 @@ function SearchBar() {
     fetchResults();
   }, [debouncedValue]);
 
-  const handleUserClick = (userId: string) => {
-    navigate(`/user/${userId}`);
+  const handleUserClick = (username: string) => {
+    navigate(`${UserProfileRoute}/${username}`);
   };
 
   return (

@@ -33,6 +33,11 @@ export const useAuth = (): AuthContextProps => {
 
 const decodeTokenAndGetState = (token: string) => {
   const decoded = jwtDecode<DecodedToken>(token);
+
+  // TODO: Check if token is expired
+  // if (!decoded.exp)
+  //   return;
+
   const roles = (decoded.userClaims || [])
     .filter(claim => claim.type.includes(ClaimType_Role))
     .map(claim => claim.value);
