@@ -13,7 +13,7 @@ export type CreatePostRequest = {
 }
 
 export const createPost = async (data: CreatePostRequest) => {
-    return await authAxiosInstance.post(`/posts`, {
+    return await authAxiosInstance.post(`/api/posts`, {
         Content: data.content,
         Visibility: data.visibility,
         Images: data.images
@@ -25,7 +25,7 @@ export type UpdatePostRequest = CreatePostRequest & {
 }
 
 export const updatePost = async (data: UpdatePostRequest) => {
-    return await authAxiosInstance.put(`/posts/${data.postId}`, {
+    return await authAxiosInstance.put(`/api/posts/${data.postId}`, {
         Content: data.content,
         Visibility: data.visibility,
         Images: data.images
@@ -33,7 +33,7 @@ export const updatePost = async (data: UpdatePostRequest) => {
 }
 
 export const deletePost = async (postId: number) => {
-    return await authAxiosInstance.delete(`/posts`, {
+    return await authAxiosInstance.delete(`/api/posts`, {
         params: { postId },
     });
 }
@@ -66,5 +66,5 @@ export type PaginationRequest = {
 }
 
 export const getAllMainPagePosts = async (data: PaginationRequest) => {
-  return await authAxiosInstance.get<PaginatedResponse>(`/posts?pageNumber=${data.pageNumber}&pageSize=${data.pageSize}`);
+  return await authAxiosInstance.get<PaginatedResponse>(`/api/posts?pageNumber=${data.pageNumber}&pageSize=${data.pageSize}`);
 }

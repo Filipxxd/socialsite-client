@@ -2,7 +2,7 @@
 import { TextInput, Loader, Avatar, Group } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { Paper } from '@mui/material';
-import { getFriends, SearchUserResponse } from '../api';
+import { searchUsers, SearchUserResponse } from '../api';
 import { useNavigate } from 'react-router-dom';
 import { UserProfileRoute } from "../../../_constants/routes.constants.ts";
 
@@ -18,7 +18,7 @@ function SearchBar() {
       if (debouncedValue.length >= 3) {
         setLoading(true);
         try {
-          const response = await getFriends(debouncedValue);
+          const response = await searchUsers(debouncedValue);
           setResults(response.data);
         } catch (error) {
           console.error('Error fetching users:', error);
