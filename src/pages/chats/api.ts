@@ -8,5 +8,5 @@ export type ChatResponse = {
 }
 
 export const getChats = async (): Promise<AxiosResponse<ChatResponse[]>> => {
-  return await authAxiosInstance.get<ChatResponse[]>('/chats/get-all');
+  return await authAxiosInstance.get<ChatResponse[]>('/api/user/chats/get-all');
 };

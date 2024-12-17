@@ -14,11 +14,11 @@ export type MyProfileResponse = {
 };
 
 export const getProfileInfo = async (): Promise<AxiosResponse<MyProfileResponse>> => {
-  return await authAxiosInstance.get<MyProfileResponse>('/user/my-profile');
+  return await authAxiosInstance.get<MyProfileResponse>('/api/user/users/my-profile');
 };
 
 export const updateProfileInfo = async (data: MyProfileResponse): Promise<AxiosResponse> => {
-  return await authAxiosInstance.put('/user/update-profile', {
+  return await authAxiosInstance.put('/api/user/users/update-profile', {
     firstname: data.firstname,
     lastname: data.lastname,
     bio: data.bio === "" ? null : data.bio,
@@ -45,13 +45,13 @@ export type UserProfileResponse = {
 }
 
 export const getUserProfile = async (username: string): Promise<AxiosResponse<UserProfileResponse>> => {
-  return await authAxiosInstance.get(`/user/profile/${username}`);
+  return await authAxiosInstance.get(`/api/user/users/profile/${username}`);
 }
 
 export const sendFriendRequest = async (userId: number): Promise<AxiosResponse> => {
-  return await authAxiosInstance.post(`/friends/send-request/${userId}`);
+  return await authAxiosInstance.post(`/api/user/friends/send-request/${userId}`);
 }
 
 export const revokeFriendRequest = async (userId: number): Promise<AxiosResponse> => {
-  return await authAxiosInstance.delete(`/friends/revoke-request/${userId}`);
+  return await authAxiosInstance.delete(`/api/user/friends/revoke-request/${userId}`);
 }

@@ -151,7 +151,7 @@ const mockReports: ReportResponse[] = [
 ];
 
 export const getReports = async (): Promise<AxiosResponse<ReportResponse[]>> => {
-    return await authAxiosInstance.get<ReportResponse[]>('/reports/get-all');
+    return await authAxiosInstance.get<ReportResponse[]>('/api/admin/reports/get-all');
 };
 
 export const getReportsMocked = (): ReportResponse[] => mockReports;
@@ -162,7 +162,7 @@ export type ReportStateChangeRequest = {
 };
 
 export const changeReportState = async(data: ReportStateChangeRequest): Promise<AxiosResponse> => {
-  return await authAxiosInstance.put('/reports/change-state', {
+  return await authAxiosInstance.put('/api/admin/reports/change-state', {
       PostId: data.postId,
       PostState: data.postState,
   });
@@ -174,7 +174,7 @@ export type UserNotificationRequest = {
 }
 
 export const notifyUser = async(data: UserNotificationRequest): Promise<AxiosResponse> => {
-  return await authAxiosInstance.post('/users/notify', {
+  return await authAxiosInstance.post('/api/admin/users/notify', {
       PostId: data.postId
   })
 };

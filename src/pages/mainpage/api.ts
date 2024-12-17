@@ -1,6 +1,5 @@
 ﻿import { AxiosResponse } from "axios";
 import authAxiosInstance from "../../shared/auth/authAxios.ts";
-import { API_BASE_URL } from "../../_constants/api.constants.ts";
 
 export type SearchUserResponse = {
   username: string;
@@ -8,6 +7,6 @@ export type SearchUserResponse = {
   profilePicturePath: string;
 }
 
-export const getFriends = async (searchTerm: string): Promise<AxiosResponse<SearchUserResponse[]>> => {
-  return await authAxiosInstance.get(`${API_BASE_URL}/user/search-users?searchTerm=${searchTerm}`);
+export const searchUsers = async (searchTerm: string): Promise<AxiosResponse<SearchUserResponse[]>> => {
+  return await authAxiosInstance.get(`/api/user/users/search-users?searchTerm=${searchTerm}`);
 };
