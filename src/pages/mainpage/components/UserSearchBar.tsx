@@ -5,6 +5,7 @@ import { Paper } from '@mui/material';
 import { searchUsers, SearchUserResponse } from '../api';
 import { useNavigate } from 'react-router-dom';
 import { UserProfileRoute } from "../../../_constants/routes.constants.ts";
+import { API_BASE_URL } from "../../../_constants/api.constants.ts";
 
 function SearchBar() {
   const [searchValue, setSearchValue] = useState('');
@@ -71,7 +72,7 @@ function SearchBar() {
               onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f0f0f0')}
               onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'white')}
             >
-              <Avatar src={user.profilePicturePath} alt={user.fullname} />
+              <Avatar src={API_BASE_URL + user.profilePicturePath} alt={user.fullname} />
               <div>{user.fullname}</div>
             </Group>
           ))}

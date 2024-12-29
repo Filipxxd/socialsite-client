@@ -1,6 +1,7 @@
 ﻿import React from "react";
 import { Modal, Button, Group, Text, Stack, Card, Flex, Avatar, ScrollArea } from "@mantine/core";
 import { FriendRequestResponse } from "../api";
+import { API_BASE_URL } from "../../../_constants/api.constants.ts";
 
 type FriendRequestsModalProps = {
   opened: boolean;
@@ -17,39 +18,39 @@ const FriendRequestsModal: React.FC<FriendRequestsModalProps> = ({
                                                                  }) => {
   return (
     <Modal opened={opened} onClose={onClose} title="Friend Requests">
-        {friendRequests.map((request) => (
-          <ScrollArea h="70vh" min-h="70vh">
-            <Stack mt="lg">
-                <Card key={request.id} shadow="sm" padding="lg">
-                  <Flex justify="space-between" align="center" w="100%">
-                    <Group>
-                      <Avatar
-                        src={"https://xsgames.co/randomusers/avatar.php"}
-                        alt={request.senderFullname}
-                        size="lg"
-                        radius="xl"
-                      />
-                      <div>
-                        <Text>{request.senderFullname}</Text>
-                      </div>
-                    </Group>
-                    <Group>
-                      <Button onClick={() => handleRequestResolve(request.id, true)}>
-                        Accept
-                      </Button>
-                      <Button
-                        variant="light"
-                        color="red"
-                        onClick={() => handleRequestResolve(request.id, false)}
-                      >
-                        Decline
-                      </Button>
-                    </Group>
-                  </Flex>
-                </Card>
-            </Stack>
-          </ScrollArea>
-        ))}
+        <ScrollArea h="70vh" min-h="70vh">
+          {friendRequests.map((request) => (
+              <Stack mt="lg" key={request.friendRequestId}>
+                  <Card key={request.friendRequestId} shadow="sm" padding="lg">
+                    <Flex justify="space-between" align="center" w="100%">
+                      <Group>
+                        <Avatar
+                          src={API_BASE_URL + request.profilePicturePath}
+                          alt={request.senderFullname}
+                          size="lg"
+                          radius="xl"
+                        />
+                        <div>
+                          <Text>{request.senderFullname}</Text>
+                        </div>
+                      </Group>
+                      <Group>
+                        <Button onClick={() => handleRequestResolve(request.friendRequestId, true)}>
+                          Accept
+                        </Button>
+                        <Button
+                          variant="light"
+                          color="red"
+                          onClick={() => handleRequestResolve(request.friendRequestId, false)}
+                        >
+                          Decline
+                        </Button>
+                      </Group>
+                    </Flex>
+                  </Card>
+              </Stack>
+          ))}
+        </ScrollArea>
     </Modal>
   );
 };

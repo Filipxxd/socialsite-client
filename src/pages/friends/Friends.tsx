@@ -22,6 +22,7 @@ import {
   resolveFriendRequest
 } from "./api.ts";
 import FriendRequestsModal from "./components/FriendRequestsModal";
+import { API_BASE_URL } from "../../_constants/api.constants.ts";
 
 const Friends = () => {
   const [friends, setFriends] = useState<FriendResponse[]>([]);
@@ -98,7 +99,7 @@ const Friends = () => {
               <Flex justify="space-between" align="center" w="100%">
                 <Group>
                   <Avatar
-                    src={"https://xsgames.co/randomusers/avatar.php"}
+                    src={API_BASE_URL + friend.profilePicturePath}
                     alt={friend.friendFullname}
                     size="lg"
                     radius="xl"

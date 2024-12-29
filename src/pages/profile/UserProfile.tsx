@@ -15,6 +15,7 @@ import {
 import { FiCheck, FiMessageSquare, FiSend, FiUserPlus } from "react-icons/fi";
 import { FriendState, getUserProfile, UserProfileResponse, sendFriendRequest, revokeFriendRequest } from "./api";
 import { showNotification } from "@mantine/notifications";
+import { API_BASE_URL } from "../../_constants/api.constants.ts";
 
 function UserProfile() {
   const { username } = useParams();
@@ -133,7 +134,7 @@ function UserProfile() {
     <Container size="sm" p="md">
       <Card shadow="lg" padding="xl" style={{ borderRadius: '8px', margin: '10px 0' }}>
         <Stack align="center">
-          <Avatar src={user.profilePicturePath} alt={user.fullname} size="xl" radius="lg" style={{ border: '4px solid #fff' }} />
+          <Avatar src={API_BASE_URL + user.profilePicturePath} alt={user.fullname} size="xl" radius="lg" style={{ border: '4px solid #fff' }} />
           <Title order={2} style={{ color: '#333' }}>{user.fullname}</Title>
           <Group>
             <Button onClick={() => handleChat(user.userId)} variant="gradient" gradient={{ from: 'indigo', to: 'cyan' }} fullWidth >

@@ -4,6 +4,7 @@ import { AxiosResponse } from "axios";
 export type FriendResponse = {
   friendId: number;
   friendFullname: string;
+  profilePicturePath: string | null;
   friendsSince: Date;
 }
 
@@ -14,6 +15,7 @@ export const getFriends = async (): Promise<AxiosResponse<FriendResponse[]>> => 
 export type FriendRequestResponse = {
   friendRequestId: number;
   senderFullname: string;
+  profilePicturePath: string | null;
   sentAt: Date;
 }
 
