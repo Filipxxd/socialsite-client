@@ -6,13 +6,13 @@ import { subscribe, unsubscribe } from './authEventEmitter.ts';
 
 type DecodedToken = {
   userId: string;
-  fullname: string;
+  username: string;
   userClaims: { type: string; value: string }[];
   exp: number;
 }
 
 type AuthContextProps = {
-  fullname: string;
+  username: string;
   userId: string;
   userClaims: { type: string; value: string }[];
   roles: string[];
@@ -43,7 +43,7 @@ const decodeTokenAndGetState = (token: string) => {
     .map(claim => claim.value);
 
   return {
-    fullname: decoded.fullname,
+    username: decoded.username,
     userId: decoded.userId,
     userClaims: decoded.userClaims || [],
     roles,
@@ -59,7 +59,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       return decodeTokenAndGetState(accessToken);
 
     return {
-      fullname: '',
+      username: '',
       userId: '',
       userClaims: [],
       roles: [],
@@ -84,7 +84,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setTokens('', '');
 
     setState({
-      fullname: '',
+      username: '',
       userId: '',
       userClaims: [],
       roles: [],
