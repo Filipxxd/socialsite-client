@@ -13,11 +13,11 @@ export type LoginResponse = {
   refreshToken: string;
 }
 
-export const login = async (values: LoginRequest): Promise<AxiosResponse<LoginResponse>> => {
-  return await axios.post(`${API_BASE_URL}/account/login`, {
-        Username: values.username, 
-        Password: values.password,
-        RememberMe: values.rememberMe
+export const login = async (data: LoginRequest): Promise<AxiosResponse<LoginResponse>> => {
+  return await axios.post(`${API_BASE_URL}/api/account/login`, {
+        Username: data.username,
+        Password: data.password,
+        RememberMe: data.rememberMe
     });
 }
 
@@ -29,17 +29,17 @@ export type RegisterRequest = {
   passwordConfirm: string;
 }
 
-export const register = async (values: RegisterRequest) => {
-  return await axios.post(`${API_BASE_URL}/account/register`, {
-        Username: values.username, 
-        FirstName: values.firstname, 
-        LastName: values.lastname, 
-        Password: values.password
+export const register = async (data: RegisterRequest) => {
+  return await axios.post(`${API_BASE_URL}/api/account/register`, {
+        Username: data.username,
+        FirstName: data.firstname,
+        LastName: data.lastname,
+        Password: data.password
     });
 }
 
 export const logout = async (refreshToken: string) => {
-  return await authAxios.post(`${API_BASE_URL}/account/logout`, {
+  return await authAxios.post(`${API_BASE_URL}/api/account/logout`, {
     Token: refreshToken
   });
 }

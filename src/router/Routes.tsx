@@ -2,15 +2,22 @@ import Home from "../pages/mainpage/Home";
 import Login from "../pages/account/Login";
 import Register from "../pages/account/Register";
 import Chats from "../pages/chats/Chats";
+import CreatePost from "../pages/posts/CreatePost";
+import Friends from "../pages/friends/Friends.tsx";
+import MyProfile from "../pages/profile/MyProfile.tsx";
 import {
   HomeRoute,
   RegisterRoute,
   LoginRoute,
   ChatsRoute,
-  FriendsRoute, MyProfileRoute
+  FriendsRoute,
+  PostsRoute,
+  MyProfileRoute,
+  UserProfileRoute,
+  ReportsRoute
 } from "../_constants/routes.constants";
-import Friends from "../pages/friends/Friends.tsx";
-import MyProfile from "../pages/profile/MyProfile.tsx";
+import UserProfile from "../pages/profile/UserProfile.tsx";
+import Reports from "../pages/reports/Reports.tsx";
 
 type RouteType = {
   path: string;
@@ -40,6 +47,22 @@ export const ROUTES: RouteType[] = [
     path: MyProfileRoute,
     requiresAuth: true,
     component: <MyProfile />,
+  },
+  {
+    path: PostsRoute,
+    requiresAuth: true,
+    component: <CreatePost />,
+  },
+  {
+    path: `${UserProfileRoute}/:username`,
+    requiresAuth: true,
+    component: <UserProfile />,
+  },
+  // Admin routes
+  {
+    path: ReportsRoute,
+    requiresAuth: false, // TODO: Setup admin auth claim check
+    component: <Reports />,
   },
   // Public routes
   {

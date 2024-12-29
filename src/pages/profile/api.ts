@@ -1,5 +1,6 @@
 ﻿import { AxiosResponse } from "axios";
 import authAxiosInstance from "../../shared/auth/authAxios.ts";
+import { PostResponse } from "../posts/api.ts";
 
 export type MyProfileResponse = {
   userId: number;
@@ -13,15 +14,51 @@ export type MyProfileResponse = {
 };
 
 export const getProfileInfo = async (): Promise<AxiosResponse<MyProfileResponse>> => {
-  return await authAxiosInstance.get<MyProfileResponse>('/user/get-profile');
+  return await authAxiosInstance.get<MyProfileResponse>('/api/users/my-profile');
 };
 
 export const updateProfileInfo = async (data: MyProfileResponse): Promise<AxiosResponse> => {
-  return await authAxiosInstance.put('/user/update-profile', {
+  return await authAxiosInstance.put('/api/users/update-profile', {
     firstname: data.firstname,
     lastname: data.lastname,
     bio: data.bio === "" ? null : data.bio,
     allowNonFriendChatAdd: data.allowNonFriendChatAdd,
     friendRequestSetting: data.friendRequestSetting
   });
+}
+
+export const updateProfileImage = async (imageData: string, fileName: string): Promise<AxiosResponse> => {
+  return await authAxiosInstance.patch('/api/users/update-profile-picture', {
+    ImageData: imageData,
+    FileName: fileName
+  });
+};
+
+export enum FriendState {
+  Friends = 'Friends',
+  CanSendRequest = 'CanSendRequest',
+  CannotSendRequest = 'CannotSendRequest',
+  RequestSent = 'RequestSent',
+  RequestReceived = 'RequestReceived',
+}
+
+export type UserProfileResponse = {
+  userId: number;
+  fullname: string;
+  profilePicturePath: string;
+  bio: string | null;
+  friendState: FriendState;
+  posts: PostResponse[];
+}
+
+export const getUserProfile = async (username: string): Promise<AxiosResponse<UserProfileResponse>> => {
+  return await authAxiosInstance.get(`/api/users/profile/${username}`);
+}
+
+export const sendFriendRequest = async (userId: number): Promise<AxiosResponse> => {
+  return await authAxiosInstance.post(`/api/friends/send-request/${userId}`);
+}
+
+export const revokeFriendRequest = async (userId: number): Promise<AxiosResponse> => {
+  return await authAxiosInstance.delete(`/api/friends/revoke-request/${userId}`);
 }

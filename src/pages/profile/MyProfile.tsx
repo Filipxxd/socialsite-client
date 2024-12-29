@@ -1,11 +1,21 @@
-﻿import { useState, useEffect } from 'react';
-import { Container, TextInput, Select, Avatar, Checkbox, Stack, Textarea, Loader, Grid, Button } from '@mantine/core';
-import { MyProfileResponse, getProfileInfo, updateProfileInfo } from './api.ts';
+﻿import { useState, useEffect } from "react";
+import {
+  Container, TextInput, Select, Avatar, Checkbox, Stack,
+  Textarea, Loader, Grid, Button, ActionIcon
+} from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
+import { Dropzone } from "@mantine/dropzone";
+import {
+  MyProfileResponse, getProfileInfo, updateProfileInfo, updateProfileImage
+} from "./api";
+import { FaUpload } from "react-icons/fa";
+import { API_BASE_URL } from "../../_constants/api.constants";
 
-const ProfilePage = () => {
+const MyProfile = () => {
   const [profile, setProfile] = useState<MyProfileResponse | null>(null);
   const [originalProfile, setOriginalProfile] = useState<MyProfileResponse | null>(null);
+  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -13,49 +23,108 @@ const ProfilePage = () => {
       setProfile(response.data);
       setOriginalProfile(response.data);
     };
-
     void fetchProfile();
-  }, []);
+
+    if (!selectedImageFile) {
+      setPreviewImage(null);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(selectedImageFile);
+    setPreviewImage(objectUrl);
+
+    return () => URL.revokeObjectURL(objectUrl);
+
+  }, [selectedImageFile]);
 
   const friendRequestOptions = [
-    { value: 'AnyOne', label: 'Anyone' },
-    { value: 'FriendsOfFriends', label: 'Friends of Friends' },
-    { value: 'NoOne', label: 'No One' }
+    { value: "AnyOne", label: "Anyone" },
+    { value: "FriendsOfFriends", label: "Friends of Friends" },
+    { value: "NoOne", label: "No One" }
   ];
 
   const changesMade = profile && originalProfile && JSON.stringify(profile) !== JSON.stringify(originalProfile);
 
   const handleSave = async () => {
-    if (profile){
-      const response = await updateProfileInfo(profile)
-
-      if (response.status === 200)
-      {
+    if (changesMade) {
+      const response = await updateProfileInfo(profile);
+      if (response.status === 200) {
         showNotification({
-          title: 'Profile Updated',
-          message: 'Your profile has been updated successfully',
-          color: 'teal',
+          title: "Profile Updated",
+          message: "Your profile has been updated successfully",
+          color: "teal",
         });
         setOriginalProfile(profile);
       }
     }
+
+    if (selectedImageFile)
+      await handleImageUpload();
   };
 
-  if (!profile) {
+  const handleImageUpload = async () => {
+    if (!selectedImageFile || !profile) return;
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      const result = event.target?.result;
+      if (typeof result !== "string") return;
+
+      const base64String = result.split(",")[1];
+      const response = await updateProfileImage(base64String, selectedImageFile.name);
+      if (response.status === 204) {
+        showNotification({
+          title: "Profile Image Updated",
+          message: "Your profile image has been updated successfully",
+          color: "teal",
+        });
+        setProfile({ ...profile, profilePicturePath: response.data.updatedImagePath });
+        setPreviewImage(null);
+        setSelectedImageFile(null);
+      }
+    };
+    reader.readAsDataURL(selectedImageFile);
+  };
+
+  if (!profile)
     return <Loader size="xl" />;
-  }
 
   return (
     <Container>
       <Grid justify="center">
         <Grid.Col span={{ base: 10, md: 3 }}>
-          <Stack align="center">
+          <Stack align="center" pos="relative">
             <Avatar
-              src={profile.profilePicturePath}
+              src={previewImage || (API_BASE_URL + profile.profilePicturePath)}
               alt={`${profile.firstname} ${profile.lastname}`}
               size={100}
               radius="xl"
             />
+            <Dropzone
+              accept={{
+                'image/jpeg': [],
+                'image/png': [],
+                'image/webp': [],
+                'image/jpg': []
+              }}
+              onDrop={(files) => setSelectedImageFile(files[0])}
+              style={{
+                position: "absolute",
+                bottom: 60,
+                right: 20,
+                width: 40,
+                height: 40,
+                border: "none",
+                backgroundColor: "rgba(255,255,255,0.8)",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              <ActionIcon variant="filled" color="blue">
+                <FaUpload />
+              </ActionIcon>
+            </Dropzone>
             <TextInput
               label="Username"
               value={profile.username}
@@ -66,7 +135,9 @@ const ProfilePage = () => {
           <Select
             label="Friend Requests"
             value={profile.friendRequestSetting}
-            onChange={(newSetting) => setProfile((prev) => prev ? { ...prev, friendRequestSetting: newSetting || prev.friendRequestSetting } : null)}
+            onChange={(newSetting) =>
+              setProfile((prev) => prev ? { ...prev, friendRequestSetting: newSetting || prev.friendRequestSetting } : null)
+            }
             data={friendRequestOptions}
             w="100%"
           />
@@ -79,7 +150,6 @@ const ProfilePage = () => {
             }
           />
         </Grid.Col>
-
         <Grid.Col span={{ base: 10, md: 6 }}>
           <Stack>
             <TextInput
@@ -96,13 +166,13 @@ const ProfilePage = () => {
             />
             <Textarea
               label="Bio"
-              value={profile.bio ?? ''}
+              value={profile.bio ?? ""}
               onChange={(e) => setProfile((prev) => prev ? { ...prev, bio: e.currentTarget.value } : null)}
               w="100%"
             />
             <Button
               onClick={handleSave}
-              disabled={!changesMade}
+              disabled={!changesMade && !selectedImageFile}
               fullWidth
             >
               Save
@@ -114,4 +184,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default MyProfile;

@@ -19,7 +19,7 @@ import {
   FriendsRoute,
   HomeRoute,
   MyProfileRoute,
-} from "../../_constants/routes.constants.tsx";
+} from "../../_constants/routes.constants.ts";
 import { getRefreshToken, setTokens } from "../../shared/auth/tokenManager";
 import { logout as apiLogout } from "../account/api";
 import { FaUserFriends, FaUserCircle } from "react-icons/fa";
@@ -29,7 +29,7 @@ import classes from "./Header.module.css";
 function Header() {
   const [menuOpened, { toggle: toggleMenu, close: closeMenu }] = useDisclosure(false);
   const navigate = useNavigate();
-  const { isAuthenticated, fullname, logout: contextLogout } = useAuth();
+  const { isAuthenticated, username, logout: contextLogout } = useAuth();
 
   const handleLogout = async () => {
     try {
@@ -105,7 +105,7 @@ function Header() {
             <Box display="flex" align-items="middle">
               <Box mr="sm" display="flex" align-items="middle">
                 <span>
-                  {fullname}
+                  {username}
                 </span>
               </Box>
               <Button onClick={handleLogout}>Logout</Button>
@@ -135,7 +135,7 @@ function Header() {
         onClose={closeMenu}
         size="100%"
         padding="md"
-        title={isAuthenticated ? fullname : null}
+        title={isAuthenticated ? username : null}
         hiddenFrom="md"
         closeButtonProps={{ size: "xl" }}
         zIndex={1000000}

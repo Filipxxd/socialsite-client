@@ -2,11 +2,11 @@ import authAxiosInstance from '../../shared/auth/authAxios.ts';
 import { AxiosResponse } from "axios";
 
 export type ChatResponse = {
-  id: number;
+  chatId: number;
   name: string;
   isDirect: boolean;
 }
 
 export const getChats = async (): Promise<AxiosResponse<ChatResponse[]>> => {
-  return await authAxiosInstance.get<ChatResponse[]>('/chats/get-all');
+  return await authAxiosInstance.get<ChatResponse[]>('/api/chats/get-all');
 };
