@@ -29,8 +29,8 @@ export const updateProfileInfo = async (data: MyProfileResponse): Promise<AxiosR
 
 export const updateProfileImage = async (imageData: string, fileName: string): Promise<AxiosResponse> => {
   return await authAxiosInstance.patch('/api/users/update-profile-picture', {
-    ImageData: imageData,
-    FileName: fileName
+    Base64: imageData,
+    Name: fileName
   });
 };
 
