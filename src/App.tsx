@@ -1,10 +1,12 @@
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { RouteProvider } from "./router/Router.tsx";
+import { createTheme, MantineColorsTuple } from "@mantine/core";
 import Header from "./pages/header/Header";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
-import { createTheme, MantineColorsTuple } from "@mantine/core";
+import '@mantine/dropzone/styles.css';
+import '@mantine/carousel/styles.css';
 
 const myColor: MantineColorsTuple = [
   "#f3edff",
