@@ -1,21 +1,36 @@
 ﻿import { useState, useEffect } from "react";
 import {
-  Container, TextInput, Select, Avatar, Checkbox, Stack,
-  Textarea, Loader, Grid, Button, ActionIcon
+  Container,
+  TextInput,
+  Select,
+  Avatar,
+  Checkbox,
+  Stack,
+  Textarea,
+  Loader,
+  Grid,
+  Button,
+  ActionIcon,
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { Dropzone } from "@mantine/dropzone";
-import {
-  MyProfileResponse, getProfileInfo, updateProfileInfo, updateProfileImage
-} from "./api";
 import { FaUpload } from "react-icons/fa";
+import { convertFileToBase64 } from "../../_helpers/file.helper.ts";
 import { API_BASE_URL } from "../../_constants/api.constants";
+import {
+  MyProfileResponse,
+  getProfileInfo,
+  updateProfileInfo,
+  updateProfileImage,
+} from "./api";
+import { ACCEPTED_IMG_TYPES, MAX_SIZE } from "../../_constants/file.constants.ts";
 
 const MyProfile = () => {
   const [profile, setProfile] = useState<MyProfileResponse | null>(null);
   const [originalProfile, setOriginalProfile] = useState<MyProfileResponse | null>(null);
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -23,70 +38,65 @@ const MyProfile = () => {
       setProfile(response.data);
       setOriginalProfile(response.data);
     };
-    void fetchProfile();
+    fetchProfile();
 
-    if (!selectedImageFile) {
+    if (selectedImageFile) {
+      const objectUrl = URL.createObjectURL(selectedImageFile);
+      setPreviewImage(objectUrl);
+      return () => URL.revokeObjectURL(objectUrl);
+    } else {
       setPreviewImage(null);
-      return;
     }
-
-    const objectUrl = URL.createObjectURL(selectedImageFile);
-    setPreviewImage(objectUrl);
-
-    return () => URL.revokeObjectURL(objectUrl);
-
   }, [selectedImageFile]);
 
   const friendRequestOptions = [
     { value: "AnyOne", label: "Anyone" },
     { value: "FriendsOfFriends", label: "Friends of Friends" },
-    { value: "NoOne", label: "No One" }
+    { value: "NoOne", label: "No One" },
   ];
 
   const changesMade = profile && originalProfile && JSON.stringify(profile) !== JSON.stringify(originalProfile);
 
+  const updateNotification = (title: string, message: string, color: string) => {
+    showNotification({ title, message, color });
+  };
+
   const handleSave = async () => {
+    setIsSubmitting(true);
+
     if (changesMade) {
       const response = await updateProfileInfo(profile);
       if (response.status === 200) {
-        showNotification({
-          title: "Profile Updated",
-          message: "Your profile has been updated successfully",
-          color: "teal",
-        });
+        updateNotification("Profile Updated", "Your profile has been updated successfully", "teal");
         setOriginalProfile(profile);
       }
     }
 
     if (selectedImageFile)
-      await handleImageUpload();
+      await handleImageUpdate();
+
+    setIsSubmitting(false);
   };
 
-  const handleImageUpload = async () => {
+  const handleImageUpdate = async () => {
     if (!selectedImageFile || !profile) return;
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-      const result = event.target?.result;
-      if (typeof result !== "string") return;
 
-      const base64String = result.split(",")[1];
-      const response = await updateProfileImage(base64String, selectedImageFile.name);
-      if (response.status === 204) {
-        showNotification({
-          title: "Profile Image Updated",
-          message: "Your profile image has been updated successfully",
-          color: "teal",
-        });
-        setProfile({ ...profile, profilePicturePath: response.data.updatedImagePath });
-        setPreviewImage(null);
-        setSelectedImageFile(null);
-      }
-    };
-    reader.readAsDataURL(selectedImageFile);
+    const base64String = await convertFileToBase64(selectedImageFile);
+    const response = await updateProfileImage(base64String.split(",")[1], selectedImageFile.name);
+
+    if (response.status === 204) {
+      updateNotification("Profile Image Updated", "Your profile image has been updated successfully", "teal");
+      setProfile({ ...profile, profilePicturePath: response.data.updatedImagePath });
+      setPreviewImage(null);
+      setSelectedImageFile(null);
+    }
   };
 
-  if (!profile)
-    return <Loader size="xl" />;
+  if (!profile) return <Loader size="xl" />;
+
+  const handleProfileChange = (field: keyof MyProfileResponse) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setProfile((prev) => prev ? { ...prev, [field]: event.currentTarget.value } : null);
+  };
 
   return (
     <Container>
@@ -100,12 +110,9 @@ const MyProfile = () => {
               radius="xl"
             />
             <Dropzone
-              accept={{
-                'image/jpeg': [],
-                'image/png': [],
-                'image/webp': [],
-                'image/jpg': []
-              }}
+              accept={ACCEPTED_IMG_TYPES}
+              maxSize={MAX_SIZE}
+              maxFiles={1}
               onDrop={(files) => setSelectedImageFile(files[0])}
               style={{
                 position: "absolute",
@@ -125,18 +132,15 @@ const MyProfile = () => {
                 <FaUpload />
               </ActionIcon>
             </Dropzone>
-            <TextInput
-              label="Username"
-              value={profile.username}
-              readOnly
-              w="100%"
-            />
+            <TextInput label="Username" value={profile.username} readOnly w="100%" />
           </Stack>
           <Select
             label="Friend Requests"
             value={profile.friendRequestSetting}
             onChange={(newSetting) =>
-              setProfile((prev) => prev ? { ...prev, friendRequestSetting: newSetting || prev.friendRequestSetting } : null)
+              setProfile((prev) =>
+                prev ? { ...prev, friendRequestSetting: newSetting || prev.friendRequestSetting } : null
+              )
             }
             data={friendRequestOptions}
             w="100%"
@@ -155,23 +159,26 @@ const MyProfile = () => {
             <TextInput
               label="First Name"
               value={profile.firstname}
-              onChange={(e) => setProfile((prev) => prev ? { ...prev, firstname: e.currentTarget.value } : null)}
+              onChange={handleProfileChange("firstname")}
               w="100%"
             />
             <TextInput
               label="Last Name"
               value={profile.lastname}
-              onChange={(e) => setProfile((prev) => prev ? { ...prev, lastname: e.currentTarget.value } : null)}
+              onChange={handleProfileChange("lastname")}
               w="100%"
             />
             <Textarea
               label="Bio"
               value={profile.bio ?? ""}
-              onChange={(e) => setProfile((prev) => prev ? { ...prev, bio: e.currentTarget.value } : null)}
               w="100%"
+              onChange={(e) =>
+                setProfile((prev) => prev ? { ...prev, bio: e.currentTarget.value } : null)
+              }
             />
             <Button
               onClick={handleSave}
+              loading={isSubmitting}
               disabled={!changesMade && !selectedImageFile}
               fullWidth
             >
