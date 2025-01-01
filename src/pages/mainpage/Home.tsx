@@ -6,7 +6,7 @@ import { Loader, Container, Center, Flex, Text, Pagination } from "@mantine/core
 import CreatePost from "../posts/components/CreatePost.tsx";
 
 export default function Home() {
-  const pageSize = 2;
+  const pageSize = 5;
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [posts, setPosts] = useState<PostResponse[]>([]);
@@ -14,23 +14,18 @@ export default function Home() {
 
   const fetchPosts = useCallback(async () => {
     setPostsLoading(true);
-    try {
-      const response = await getAllMainPagePosts({
-        pageNumber: page,
-        pageSize: pageSize,
-        visibility: PostFilterVisibility.FromEveryone,
+
+    await getAllMainPagePosts({
+      pageNumber: page,
+      pageSize: pageSize,
+      visibility: PostFilterVisibility.FromEveryone,
+    })
+      .then((res) => {
+        setTotalPages(Math.ceil(res.data.totalRecords / pageSize));
+        setPosts(res.data.items);
       });
-      if (response.status === 200) {
-        setTotalPages(Math.ceil(response.data.totalRecords / pageSize));
-        setPosts(response.data.items);
-      } else {
-        setPosts([]);
-      }
-    } catch (error) {
-      console.error("Failed to fetch posts", error);
-    } finally {
-      setPostsLoading(false);
-    }
+
+    setPostsLoading(false);
   }, [page, pageSize]);
 
   useEffect(() => {
@@ -43,7 +38,7 @@ export default function Home() {
       <CreatePost onSuccess={fetchPosts} />
       {postsLoading && <Loader size="xl" />}
       {!postsLoading && posts.length > 0 ? (
-        <Flex wrap="wrap" justify="center" gap="md">
+        <Flex justify={"center"} direction={"column"} align={"center"}>
           {posts.map((post) => (
             <Post
               key={post.postId}
@@ -64,6 +59,7 @@ export default function Home() {
       )}
       <Center>
         <Pagination
+          mb="xl"
           total={totalPages}
           value={page}
           onChange={setPage}

@@ -21,8 +21,7 @@ import {
   updateProfileInfo,
   updateProfileImage
 } from "./api";
-import { convertFileToBase64 } from "../../_helpers/file.helper.ts";
-import { API_BASE_URL } from "../../_constants/api.constants";
+import { convertFileToBase64, getPathOrNull } from "../../_helpers/file.helper.ts";
 import { ACCEPTED_IMG_TYPES, MAX_SIZE } from "../../_constants/file.constants.ts";
 import { showErrorToast, showSuccessToast } from "../../_helpers/toasts.helper.ts";
 
@@ -91,7 +90,7 @@ const MyProfile = () => {
         <Grid.Col span={{ base: 10, md: 3 }}>
           <Stack align="center" pos="relative">
             <Avatar
-              src={previewImage || (API_BASE_URL + profile.profilePicturePath)}
+              src={previewImage || getPathOrNull(profile.profilePicturePath)}
               alt={`${profile.firstname} ${profile.lastname}`}
               size={100}
               radius="xl"

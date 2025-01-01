@@ -9,7 +9,7 @@ import {
   Grid,
   Paper,
   Menu,
-  Text,
+  Text, Center
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { FaRegTrashAlt, FaUpload, FaGlobe } from "react-icons/fa";
@@ -88,9 +88,11 @@ export default function CreatePost({ onSuccess }: CreatePostProps) {
           maxSize={MAX_SIZE}
           mb="sm"
         >
-          <Text fw={500} c="dimmed" size="lg">
-            <FaUpload /> Upload Images
-          </Text>
+          <Center>
+            <Text fw={500} c="dimmed" size="lg">
+              <FaUpload /> Upload Images
+            </Text>
+          </Center>
         </Dropzone>
         {imagesBase64.length > 0 && (
           <Grid gutter="sm" mb="sm">

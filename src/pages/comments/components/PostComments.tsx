@@ -6,15 +6,15 @@ import {
   Box,
   Text,
   ActionIcon,
-  TextInput,
+  TextInput, Divider
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { IoSendSharp } from "react-icons/io5";
-import { API_BASE_URL } from "../../../_constants/api.constants.ts";
 import { showErrorToast, showSuccessToast } from "../../../_helpers/toasts.helper.ts";
 import { formatDate } from "../../../_helpers/date.helper.ts";
 import { CommentRequest, CommentResponse, createComment, deleteComment } from "../api.ts";
+import { getPathOrNull } from "../../../_helpers/file.helper.ts";
 
 type PostCommentsProps = {
   commentsInput: CommentResponse[];
@@ -72,6 +72,7 @@ export default function PostComments({ commentsInput, postId }: PostCommentsProp
 
   return (
     <>
+      <Divider my={2}/>
       <Box
         ref={commentsRef}
         style={{ minHeight: '30vh', maxHeight: '30vh', overflowY: 'auto' }}
@@ -82,7 +83,7 @@ export default function PostComments({ commentsInput, postId }: PostCommentsProp
             <Flex align={"center"}>
               <Avatar
                 alt={comment.senderFullname}
-                src={comment.senderProfilePicturePath ? API_BASE_URL + comment.senderProfilePicturePath : undefined}
+                src={getPathOrNull(comment.senderProfilePicturePath)}
                 radius="xl"
               />
               <Flex direction="column" ml={10} flex={1}>
@@ -91,12 +92,11 @@ export default function PostComments({ commentsInput, postId }: PostCommentsProp
               </Flex>
               {comment.canDelete && (
                 <ActionIcon
-                  variant="outline"
+                  variant="subtle"
                   onClick={() => handleDeleteComment(comment.commentId)}
                   size="sm"
-                >
-                  <FaRegTrashAlt />
-                </ActionIcon>
+                  children={<FaRegTrashAlt />}
+                />
               )}
             </Flex>
             <Text mt={4} size="sm">{comment.content}</Text>

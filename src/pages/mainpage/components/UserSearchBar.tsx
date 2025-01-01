@@ -4,9 +4,9 @@ import { useDebouncedValue } from '@mantine/hooks';
 import { useNavigate } from 'react-router-dom';
 import { searchUsers, SearchUserResponse } from '../api';
 import { UserProfileRoute } from '../../../_constants/routes.constants.ts';
-import { API_BASE_URL } from '../../../_constants/api.constants.ts';
 import { showErrorToast } from '../../../_helpers/toasts.helper.ts';
 import styles from './UserSearchBar.module.css';
+import { getPathOrNull } from "../../../_helpers/file.helper.ts";
 
 function SearchBar() {
   const [searchValue, setSearchValue] = useState('');
@@ -53,7 +53,7 @@ function SearchBar() {
               onMouseDown={(event) => handleMouseDown(event, user.username)}
             >
               <Avatar
-                src={`${API_BASE_URL}${user.profilePicturePath}`}
+                src={getPathOrNull(user.profilePicturePath)}
                 alt={user.fullname}
               />
               <div>{user.fullname}</div>

@@ -22,7 +22,7 @@ import {
   resolveFriendRequest
 } from "./api.ts";
 import FriendRequestsModal from "./components/FriendRequestsModal";
-import { API_BASE_URL } from "../../_constants/api.constants.ts";
+import { getPathOrNull } from "../../_helpers/file.helper.ts";
 
 const Friends = () => {
   const [friends, setFriends] = useState<FriendResponse[]>([]);
@@ -99,7 +99,7 @@ const Friends = () => {
               <Flex justify="space-between" align="center" w="100%">
                 <Group>
                   <Avatar
-                    src={API_BASE_URL + friend.profilePicturePath}
+                    src={getPathOrNull(friend.profilePicturePath)}
                     alt={friend.friendFullname}
                     size="lg"
                     radius="xl"

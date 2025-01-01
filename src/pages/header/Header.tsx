@@ -8,7 +8,7 @@ import {
   Divider,
   Box,
   Drawer,
-  Text,
+  Text, Center
 } from "@mantine/core";
 import { useAuth } from "../../_auth/AuthContext.tsx";
 import {
@@ -96,9 +96,9 @@ function Header() {
           {isAuthenticated ? (
             <Box display="flex" align-items="middle">
               <Box mr="sm" display="flex" align-items="middle">
-                <span>
+                <Center>
                   {username}
-                </span>
+                </Center>
               </Box>
               <Button onClick={handleLogout}>Logout</Button>
             </Box>

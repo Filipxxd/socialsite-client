@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import { Modal, Button, Group, Text, Stack, Card, Flex, Avatar, ScrollArea } from "@mantine/core";
 import { FriendRequestResponse } from "../api";
-import { API_BASE_URL } from "../../../_constants/api.constants.ts";
+import { getPathOrNull } from "../../../_helpers/file.helper.ts";
 
 type FriendRequestsModalProps = {
   opened: boolean;
@@ -25,7 +25,7 @@ const FriendRequestsModal: React.FC<FriendRequestsModalProps> = ({
                     <Flex justify="space-between" align="center" w="100%">
                       <Group>
                         <Avatar
-                          src={API_BASE_URL + request.profilePicturePath}
+                          src={getPathOrNull(request.profilePicturePath)}
                           alt={request.senderFullname}
                           size="lg"
                           radius="xl"
