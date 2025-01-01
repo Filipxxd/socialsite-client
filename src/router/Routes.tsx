@@ -2,7 +2,6 @@ import Home from "../pages/mainpage/Home";
 import Login from "../pages/account/Login";
 import Register from "../pages/account/Register";
 import Chats from "../pages/chats/Chats";
-import CreatePost from "../pages/posts/CreatePost";
 import Friends from "../pages/friends/Friends.tsx";
 import MyProfile from "../pages/profile/MyProfile.tsx";
 import {
@@ -11,7 +10,6 @@ import {
   LoginRoute,
   ChatsRoute,
   FriendsRoute,
-  PostsRoute,
   MyProfileRoute,
   UserProfileRoute,
   ReportsRoute
@@ -47,11 +45,6 @@ export const ROUTES: RouteType[] = [
     path: MyProfileRoute,
     requiresAuth: true,
     component: <MyProfile />,
-  },
-  {
-    path: PostsRoute,
-    requiresAuth: true,
-    component: <CreatePost />,
   },
   {
     path: `${UserProfileRoute}/:username`,
