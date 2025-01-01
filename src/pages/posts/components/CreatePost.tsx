@@ -17,13 +17,14 @@ import Typography from "@mui/material/Typography";
 import { createPost, CreatePostRequest, PostVisibility } from "../api.ts";
 import { convertFilesToBase64 } from "../../../_helpers/file.helper.ts";
 import { ACCEPTED_IMG_TYPES, MAX_SIZE } from "../../../_constants/file.constants.ts";
+import { showErrorToast, showSuccessToast } from "../../../_helpers/toasts.helper.ts";
 
 type CreatePostProps = {
   onSuccess: () => Promise<void>;
 };
 
 export default function CreatePost({ onSuccess }: CreatePostProps) {
-  const [fileImages, setFileimages] = useState<File[]>([]);
+  const [fileImages, setFileImages] = useState<File[]>([]);
   const [imagesBase64, setBase64Images] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -41,29 +42,33 @@ export default function CreatePost({ onSuccess }: CreatePostProps) {
 
   const handleImagesChange = (files: File[]) => {
     if (!files) return;
-    setFileimages(files);
+    setFileImages(files);
     convertFilesToBase64(files).then(setBase64Images);
   };
 
   const removeImage = (index: number) => {
-    setFileimages((prev) => prev.filter((_, i) => i !== index));
+    setFileImages((prev) => prev.filter((_, i) => i !== index));
     setBase64Images((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (createPostRequest: CreatePostRequest) => {
     setIsSubmitting(true);
+
     const processedImages = fileImages.map((file, index) => ({
       name: file.name,
       base64: imagesBase64[index].split(",")[1],
     }));
 
-    const response = await createPost({ ...createPostRequest, images: processedImages });
-    if (response.status === 200) {
-      form.reset();
-      setFileimages([]);
-      setBase64Images([]);
-      await onSuccess();
-    }
+    await createPost({ ...createPostRequest, images: processedImages })
+      .then(async () => {
+        showSuccessToast("Post created successfully");
+        form.reset();
+        setFileImages([]);
+        setBase64Images([]);
+        await onSuccess();
+      })
+      .catch(() => showErrorToast());
+
     setIsSubmitting(false);
   }
 

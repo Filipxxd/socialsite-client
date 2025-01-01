@@ -41,13 +41,13 @@ function SearchBar() {
   return (
     <div style={{ position: 'relative', maxWidth: 400, margin: 'auto' }}>
       <TextInput
-        placeholder="Search friends..."
+        placeholder="Search users..."
         value={searchValue}
         onChange={(event) => setSearchValue(event.currentTarget.value)}
         styles={{ input: { height: 'auto', borderRadius: 8 } }}
       />
-      {loading && <Loader size="sm" style={{ position: 'absolute', right: 12, top: 10 }} />}
-      {results.length > 0 && (
+      {loading && <Loader size="sm" style={{ position: 'absolute', right: 12, top: 7 }} />}
+      {!loading && results.length > 0 && (
         <Paper
           style={{
             position: 'absolute',
@@ -55,7 +55,7 @@ function SearchBar() {
             left: 0,
             right: 0,
             marginTop: 8,
-            zIndex: 10,
+            zIndex: 1000,
             background: 'white',
           }}
           elevation={3}

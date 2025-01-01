@@ -2,6 +2,12 @@
 import authAxiosInstance from "../../shared/auth/authAxios.ts";
 import { PostResponse } from "../posts/api.ts";
 
+export enum FriendRequestSetting {
+  AnyOne = 'Anyone',
+  FriendsOfFriends = 'Only friends',
+  NoOne = 'No one',
+}
+
 export type MyProfileResponse = {
   userId: number;
   username: string;
@@ -10,7 +16,7 @@ export type MyProfileResponse = {
   profilePicturePath: string;
   bio: string | null;
   allowNonFriendChatAdd: boolean;
-  friendRequestSetting: string;
+  friendRequestSetting: FriendRequestSetting;
 };
 
 export const getProfileInfo = async (): Promise<AxiosResponse<MyProfileResponse>> => {

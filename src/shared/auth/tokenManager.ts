@@ -13,6 +13,11 @@ export const setTokens = (newAccessToken: string, newRefreshToken: string) => {
   localStorage.setItem(JWT_Refresh_Token, newRefreshToken);
 };
 
+export const removeTokens = () => {
+  localStorage.removeItem(JWT_Access_Token);
+  localStorage.removeItem(JWT_Refresh_Token);
+};
+
 export const loadTokensFromStorage = () => {
   accessToken = localStorage.getItem(JWT_Access_Token);
   refreshToken = localStorage.getItem(JWT_Refresh_Token);

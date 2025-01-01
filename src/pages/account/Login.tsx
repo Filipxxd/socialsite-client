@@ -6,22 +6,18 @@ import {
   Button,
   Group, Checkbox
 } from "@mantine/core";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import { useNavigate } from "react-router-dom";
-import { login as loginUser, LoginRequest } from "./api";
 import { HomeRoute } from "../../_constants/routes.constants";
-import { showNotification } from "@mantine/notifications";
+import { login as loginUser, LoginRequest } from "./api";
 import { useAuth } from "../../shared/auth/AuthContext";
+import { showErrorToast, showSuccessToast } from "../../_helpers/toasts.helper.ts";
 
 export default function Login() {
   const { login, isAuthenticated } = useAuth();
+  const [ isSubmitting, setIsSubmitting ] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isAuthenticated)
-      navigate(HomeRoute);
-  });
 
   const form = useForm<LoginRequest>({
     initialValues: {
@@ -36,34 +32,23 @@ export default function Login() {
     },
   });
 
-  const handleSubmit = async (values: LoginRequest) => {
-    try {
-      const response = await loginUser(values);
-
-      if (response.status !== 200) {
-        showNotification({
-          title: "Error",
-          message: "Invalid Credentials",
-          color: "red",
-        });
-        return;
-      }
-
-      login(response.data.accessToken, response.data.refreshToken);
-      showNotification({
-        title: "Login Successful",
-        message: "Welcome!",
-        color: "teal",
-      });
+  useEffect(() => {
+    if (isAuthenticated)
       navigate(HomeRoute);
+  });
 
-    } catch {
-      showNotification({
-        title: "Error",
-        message: "An error occurred during the login process",
-        color: "red",
-      });
-    }
+  const handleSubmit = async (values: LoginRequest) => {
+    setIsSubmitting(true);
+
+    await loginUser(values).then((res) => {
+      login(res.data.accessToken, res.data.refreshToken);
+      showSuccessToast("Successfully logged in");
+      navigate(HomeRoute);
+    }).catch(() => {
+      showErrorToast("Invalid Credentials");
+    });
+
+    setIsSubmitting(false);
   };
 
   return (
@@ -80,7 +65,13 @@ export default function Login() {
         />
         <Checkbox label="Remember me" {...form.getInputProps("rememberMe", { type: 'checkbox' })} />
         <Group mt="md">
-          <Button type="submit">Sign in</Button>
+          <Button
+            type="submit"
+            loading={isSubmitting}
+            fullWidth
+          >
+            Sign in
+          </Button>
         </Group>
       </form>
     </Container>

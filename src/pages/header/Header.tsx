@@ -11,7 +11,6 @@ import {
   Text,
 } from "@mantine/core";
 import { useAuth } from "../../shared/auth/AuthContext";
-import { showNotification } from "@mantine/notifications";
 import {
   ChatsRoute,
   LoginRoute,
@@ -20,11 +19,12 @@ import {
   HomeRoute,
   MyProfileRoute,
 } from "../../_constants/routes.constants.ts";
-import { getRefreshToken, setTokens } from "../../shared/auth/tokenManager";
+import { getRefreshToken, removeTokens } from "../../shared/auth/tokenManager";
 import { logout as apiLogout } from "../account/api";
 import { FaUserFriends, FaUserCircle } from "react-icons/fa";
 import { IoChatbox } from "react-icons/io5";
 import classes from "./Header.module.css";
+import { showSuccessToast } from "../../_helpers/toasts.helper.ts";
 
 function Header() {
   const [menuOpened, { toggle: toggleMenu, close: closeMenu }] = useDisclosure(false);
@@ -32,23 +32,15 @@ function Header() {
   const { isAuthenticated, username, logout: contextLogout } = useAuth();
 
   const handleLogout = async () => {
-    try {
-      const refreshToken = getRefreshToken();
-      if (refreshToken) {
-        await apiLogout(refreshToken);
-      }
-    } catch (error) {
-      console.error("Logout error:", error);
-    } finally {
-      setTokens("", "");
-      contextLogout();
-      showNotification({
-        title: "Success",
-        message: "You have been logged out!",
-        color: "green",
-      });
-      navigate(LoginRoute);
-    }
+    const refreshToken = getRefreshToken();
+
+    if (refreshToken)
+      await apiLogout(refreshToken);
+
+    removeTokens();
+    contextLogout();
+    showSuccessToast("You have been logged out");
+    navigate(LoginRoute);
   };
 
   const navigateAndClose = (path: string) => {

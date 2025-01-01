@@ -1,5 +1,5 @@
 ﻿import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Avatar,
   Button,
@@ -14,76 +14,59 @@ import {
 } from "@mantine/core";
 import { FiCheck, FiMessageSquare, FiSend, FiUserPlus } from "react-icons/fi";
 import { FriendState, getUserProfile, UserProfileResponse, sendFriendRequest, revokeFriendRequest } from "./api";
-import { showNotification } from "@mantine/notifications";
 import { API_BASE_URL } from "../../_constants/api.constants.ts";
+import { showErrorToast, showSuccessToast } from "../../_helpers/toasts.helper.ts";
+import { HomeRoute } from "../../_constants/routes.constants.ts";
 
 function UserProfile() {
   const { username } = useParams();
+  const navigate = useNavigate();
   const [user, setUser] = useState<UserProfileResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      try {
-        if (!username) return Promise.reject("Username is not supplied");
-        const response = await getUserProfile(username);
-        setUser(response.data);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      } finally {
-        setLoading(false);
+      setLoading(true);
+
+      if (!username){
+        navigate(HomeRoute);
+        return;
       }
+
+      await getUserProfile(username)
+        .then(response => setUser(response.data))
+        .catch();
+
+      setLoading(false);
     };
-    fetchUserData();
-  }, [username]);
 
-  if (loading) {
-    return <Loader size="lg" />;
-  }
+    void fetchUserData();
+  }, [username, navigate]);
 
-  if (!user) {
-    return <Text size="lg" color="red">User not found.</Text>;
-  }
+  if (loading) return <Loader size="lg" />;
+
+  if (!user) return <Text size="lg" color="red">User not found.</Text>;
 
   const handleChat = (userId: number) => {
     console.log('Starting chat with:', userId);
   };
 
   const handleRevokeFriendRequest = async (userId: number) => {
-      const response = await revokeFriendRequest(userId);
-      if (response.status === 204) {
+      await revokeFriendRequest(userId).then(() => {
         setUser(prevUser => prevUser ? { ...prevUser, friendState: FriendState.CanSendRequest } : null);
-        showNotification({
-          title: "Success",
-          message: "Request revoked!",
-          color: "green",
-        });
-      } else {
-        showNotification({
-          title: "Error",
-          message: "An error has occurred!",
-          color: "red",
-        });
-      }
+        showSuccessToast("Request revoked");
+      }).catch(() => showErrorToast());
   };
 
   const handleAddFriend = async (userId: number) => {
-      const response = await sendFriendRequest(userId);
-      if (response.status === 204) {
-        setUser(prevUser => prevUser ? { ...prevUser, friendState: FriendState.RequestSent } : null);
-        showNotification({
-          title: "Success",
-          message: "Request sent!",
-          color: "green",
+      await sendFriendRequest(userId)
+        .then(() => {
+          setUser(prevUser => prevUser ? { ...prevUser, friendState: FriendState.RequestSent } : null);
+          showSuccessToast("Friend request sent");
+        }).catch(() => {
+          setUser(prevUser => prevUser ? { ...prevUser, friendState: FriendState.CanSendRequest } : null);
+          showErrorToast();
         });
-      } else {
-        showNotification({
-          title: "Error",
-          message: "An error has occurred!",
-          color: "red",
-        });
-        setUser(prevUser => prevUser ? { ...prevUser, friendState: FriendState.CanSendRequest } : null);
-      }
   };
 
   const renderFriendButton = () => {

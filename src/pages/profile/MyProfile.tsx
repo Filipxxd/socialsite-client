@@ -19,11 +19,13 @@ import { convertFileToBase64 } from "../../_helpers/file.helper.ts";
 import { API_BASE_URL } from "../../_constants/api.constants";
 import {
   MyProfileResponse,
+  FriendRequestSetting,
   getProfileInfo,
   updateProfileInfo,
-  updateProfileImage,
+  updateProfileImage
 } from "./api";
 import { ACCEPTED_IMG_TYPES, MAX_SIZE } from "../../_constants/file.constants.ts";
+import { showErrorToast } from "../../_helpers/toasts.helper.ts";
 
 const MyProfile = () => {
   const [profile, setProfile] = useState<MyProfileResponse | null>(null);
@@ -32,13 +34,16 @@ const MyProfile = () => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const changesMade = profile && originalProfile && JSON.stringify(profile) !== JSON.stringify(originalProfile);
+
   useEffect(() => {
     const fetchProfile = async () => {
       const response = await getProfileInfo();
       setProfile(response.data);
       setOriginalProfile(response.data);
     };
-    fetchProfile();
+
+    void fetchProfile();
 
     if (selectedImageFile) {
       const objectUrl = URL.createObjectURL(selectedImageFile);
@@ -49,47 +54,39 @@ const MyProfile = () => {
     }
   }, [selectedImageFile]);
 
-  const friendRequestOptions = [
-    { value: "AnyOne", label: "Anyone" },
-    { value: "FriendsOfFriends", label: "Friends of Friends" },
-    { value: "NoOne", label: "No One" },
-  ];
-
-  const changesMade = profile && originalProfile && JSON.stringify(profile) !== JSON.stringify(originalProfile);
-
-  const updateNotification = (title: string, message: string, color: string) => {
-    showNotification({ title, message, color });
-  };
-
   const handleSave = async () => {
     setIsSubmitting(true);
 
     if (changesMade) {
-      const response = await updateProfileInfo(profile);
-      if (response.status === 200) {
-        updateNotification("Profile Updated", "Your profile has been updated successfully", "teal");
-        setOriginalProfile(profile);
-      }
+      await updateProfileInfo(profile)
+        .then(() => {
+          showNotification({
+            title: "Success",
+            message: "Your profile has been updated successfully",
+            color: "teal",
+          });
+          setOriginalProfile(profile);
+        }).catch(() => showErrorToast());
     }
 
-    if (selectedImageFile)
-      await handleImageUpdate();
+    if (selectedImageFile && profile){
+      const base64String = await convertFileToBase64(selectedImageFile);
+
+      await updateProfileImage(base64String.split(",")[1], selectedImageFile.name)
+        .then((res) => {
+          showNotification({
+            title: "Success",
+            message: "Your profile image has been updated successfully",
+            color: "teal",
+          });
+
+          setProfile({ ...profile, profilePicturePath: res.data.updatedImagePath });
+          setPreviewImage(null);
+          setSelectedImageFile(null);
+        }).catch(() => showErrorToast());
+    }
 
     setIsSubmitting(false);
-  };
-
-  const handleImageUpdate = async () => {
-    if (!selectedImageFile || !profile) return;
-
-    const base64String = await convertFileToBase64(selectedImageFile);
-    const response = await updateProfileImage(base64String.split(",")[1], selectedImageFile.name);
-
-    if (response.status === 204) {
-      updateNotification("Profile Image Updated", "Your profile image has been updated successfully", "teal");
-      setProfile({ ...profile, profilePicturePath: response.data.updatedImagePath });
-      setPreviewImage(null);
-      setSelectedImageFile(null);
-    }
   };
 
   if (!profile) return <Loader size="xl" />;
@@ -138,11 +135,15 @@ const MyProfile = () => {
             label="Friend Requests"
             value={profile.friendRequestSetting}
             onChange={(newSetting) =>
-              setProfile((prev) =>
-                prev ? { ...prev, friendRequestSetting: newSetting || prev.friendRequestSetting } : null
-              )
+              setProfile((prev) => ({
+                ...prev!,
+                friendRequestSetting: newSetting as FriendRequestSetting,
+              }))
             }
-            data={friendRequestOptions}
+            data={Object.entries(FriendRequestSetting).map(([key, value]) => ({
+              value: key as FriendRequestSetting,
+              label: value,
+            }))}
             w="100%"
           />
           <Checkbox
