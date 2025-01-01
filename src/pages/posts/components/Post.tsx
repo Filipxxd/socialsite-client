@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Card,
   CardHeader,
@@ -5,18 +6,24 @@ import {
   CardActions,
   Avatar,
   IconButton,
-  Typography,
+  Typography
 } from "@mui/material";
 import { Carousel } from "@mantine/carousel";
 import InsertCommentIcon from "@mui/icons-material/InsertComment";
 import FlagIcon from "@mui/icons-material/Flag";
+import styles from './Post.module.css';
 import { PostResponse } from "../api.ts";
 import { API_BASE_URL } from "../../../_constants/api.constants.ts";
-import { formatDate } from "../../../_helpers/date.helper.ts";
-import styles from './Post.module.css';
+import PostComments from "../../comments/components/PostComments.tsx";
 
 export default function Post(post: PostResponse) {
   const hasImages = post.images.length > 0;
+  const [commentsOpen, setCommentsOpen] = useState(false);
+
+  const toggleComments = () => {
+    setCommentsOpen(prev => !prev);
+  };
+
   return (
     <Card className={styles.card}>
       <CardHeader
@@ -28,7 +35,7 @@ export default function Post(post: PostResponse) {
           />
         }
         title={post.userFullname}
-        subheader={formatDate(post.dateCreated)}
+        subheader={new Date(post.dateCreated).toLocaleString()}
       />
       <div className={styles.carouselContainer}>
         {hasImages ? (
@@ -48,18 +55,17 @@ export default function Post(post: PostResponse) {
         )}
       </div>
       <CardContent>
-        <Typography variant="body2">
-          {post.content}
-        </Typography>
+        <Typography variant="body2">{post.content}</Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add comment">
+        <IconButton aria-label="add comment" onClick={toggleComments}>
           <InsertCommentIcon />
         </IconButton>
         <IconButton aria-label="report">
           <FlagIcon />
         </IconButton>
       </CardActions>
+      {commentsOpen && <PostComments commentsInput={post.comments} postId={post.postId} /> }
     </Card>
   );
 }

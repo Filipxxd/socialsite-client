@@ -1,4 +1,5 @@
 import authAxiosInstance from "../../_auth/authAxios.ts";
+import { CommentResponse } from "../comments/api.ts";
 
 export enum PostVisibility {
     Everyone = "Everyone",
@@ -36,13 +37,6 @@ export const deletePost = async (postId: number) => {
     return await authAxiosInstance.delete(`/api/posts`, {
         params: { postId },
     });
-}
-
-export type CommentResponse = {
-    commentId: number;
-    content: string;
-    userFullName: string;
-    dateCreated: Date;
 }
 
 export type PostResponse = {
