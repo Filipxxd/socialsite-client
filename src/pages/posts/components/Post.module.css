@@ -1,0 +1,26 @@
+﻿.card {
+    width: 345px;
+    margin-bottom: 16px;
+}
+
+.carouselContainer {
+    height: 10rem;
+}
+
+.slide {
+    text-align: center;
+}
+
+.slideImage {
+    max-height: 10rem;
+}
+
+.noImages {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background-color: #f0f0f0;
+    color: #aaa;
+    font-size: 1.2rem;
+}
