@@ -15,7 +15,7 @@ import {
   passwordRegex,
 } from "../../_constants/regex.constants.ts";
 import { register, RegisterRequest } from "./api.ts";
-import { useAuth } from "../../shared/auth/AuthContext";
+import { useAuth } from "../../_auth/AuthContext.tsx";
 import { HomeRoute, LoginRoute } from "../../_constants/routes.constants.ts";
 import { showErrorToast, showSuccessToast } from "../../_helpers/toasts.helper.ts";
 

@@ -1,7 +1,7 @@
 ﻿import axios from 'axios';
-import { API_BASE_URL } from '../../_constants/api.constants';
+import { API_BASE_URL } from '../_constants/api.constants.ts';
 import { isAccessTokenExpired } from './auth.utils.ts';
-import { getAccessToken, getRefreshToken, setTokens, loadTokensFromStorage } from './tokenManager';
+import { getAccessToken, getRefreshToken, setTokens, loadTokensFromStorage } from './tokenManager.ts';
 import { emit } from './authEventEmitter.ts';
 
 loadTokensFromStorage();
@@ -33,29 +33,22 @@ const refreshAccessToken = async (): Promise<string | null> => {
     return new Promise((resolve) => subscribeTokenRefresh(resolve));
 
   isRefreshing = true;
+  let accessToken: string | null = null;
 
-  try {
-    const response = await axios.post(`${API_BASE_URL}/api/account/refresh-token`, {
-      Token: refreshToken,
+  await axios.post(`${API_BASE_URL}/api/account/refresh-token`, { Token: refreshToken, })
+    .then((response) => {
+      const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
+
+      setTokens(newAccessToken, newRefreshToken);
+      onRefreshed(newAccessToken);
+
+      accessToken = newAccessToken;
+    }).catch(() => {
+      emit('logout');
     });
 
-    if (response.status !== 200) {
-      emit('logout');
-      return Promise.reject("Failed to refresh token");
-    }
-
-    const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
-    setTokens(newAccessToken, newRefreshToken);
-
-    onRefreshed(newAccessToken);
-
-    return newAccessToken;
-  } catch (err) {
-    emit('logout');
-    return Promise.reject(err);
-  } finally {
-    isRefreshing = false;
-  }
+  isRefreshing = false;
+  return accessToken;
 };
 
 authAxiosInstance.interceptors.request.use(

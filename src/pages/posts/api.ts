@@ -1,4 +1,4 @@
-import authAxiosInstance from "../../shared/auth/authAxios.ts";
+import authAxiosInstance from "../../_auth/authAxios.ts";
 
 export enum PostVisibility {
     Everyone = "Everyone",

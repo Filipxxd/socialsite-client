@@ -1,5 +1,5 @@
 ﻿import { AxiosResponse } from "axios";
-import authAxiosInstance from "../../shared/auth/authAxios.ts";
+import authAxiosInstance from "../../_auth/authAxios.ts";
 import { PostResponse } from "../posts/api.ts";
 
 export enum FriendRequestSetting {

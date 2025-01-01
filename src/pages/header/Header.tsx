@@ -10,7 +10,7 @@ import {
   Drawer,
   Text,
 } from "@mantine/core";
-import { useAuth } from "../../shared/auth/AuthContext";
+import { useAuth } from "../../_auth/AuthContext.tsx";
 import {
   ChatsRoute,
   LoginRoute,
@@ -19,7 +19,7 @@ import {
   HomeRoute,
   MyProfileRoute,
 } from "../../_constants/routes.constants.ts";
-import { getRefreshToken, removeTokens } from "../../shared/auth/tokenManager";
+import { getRefreshToken, removeTokens } from "../../_auth/tokenManager.ts";
 import { logout as apiLogout } from "../account/api";
 import { FaUserFriends, FaUserCircle } from "react-icons/fa";
 import { IoChatbox } from "react-icons/io5";

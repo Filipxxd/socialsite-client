@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../shared/auth/AuthContext.tsx";
+import { useAuth } from "../_auth/AuthContext.tsx";
 import { HomeRoute, LoginRoute } from "../_constants/routes.constants.ts";
 
 type AuthorizedRoute = {

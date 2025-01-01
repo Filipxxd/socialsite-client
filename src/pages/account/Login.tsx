@@ -11,7 +11,7 @@ import { useForm } from "@mantine/form";
 import { useNavigate } from "react-router-dom";
 import { HomeRoute } from "../../_constants/routes.constants";
 import { login as loginUser, LoginRequest } from "./api";
-import { useAuth } from "../../shared/auth/AuthContext";
+import { useAuth } from "../../_auth/AuthContext.tsx";
 import { showErrorToast, showSuccessToast } from "../../_helpers/toasts.helper.ts";
 
 export default function Login() {

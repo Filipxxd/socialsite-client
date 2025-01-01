@@ -1,4 +1,4 @@
-﻿import { JWT_Access_Token, JWT_Refresh_Token } from '../../_constants/localStorage.constants';
+﻿import { JWT_Access_Token, JWT_Refresh_Token } from '../_constants/localStorage.constants.ts';
 
 let accessToken: string | null = null;
 let refreshToken: string | null = null;
