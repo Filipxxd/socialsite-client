@@ -10,16 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emotion/react": "^11.13.5",
-    "@emotion/styled": "^11.13.5",
     "@mantine/carousel": "^7.15.2",
     "@mantine/core": "^7.15.2",
     "@mantine/dropzone": "^7.15.2",
     "@mantine/form": "^7.15.2",
     "@mantine/hooks": "^7.15.2",
     "@mantine/notifications": "^7.15.2",
-    "@mui/icons-material": "^6.1.8",
-    "@mui/material": "^6.1.8",
     "@types/css-modules": "^1.0.5",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.7.9",

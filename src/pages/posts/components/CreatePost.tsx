@@ -9,12 +9,16 @@ import {
   Grid,
   Paper,
   Menu,
+  Text,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { FaRegTrashAlt, FaUpload, FaGlobe } from "react-icons/fa";
 import { Dropzone } from "@mantine/dropzone";
-import Typography from "@mui/material/Typography";
-import { createPost, CreatePostRequest, PostVisibility } from "../api.ts";
+import {
+  createPost,
+  CreatePostRequest,
+  PostVisibility,
+} from "../api.ts";
 import { convertFilesToBase64 } from "../../../_helpers/file.helper.ts";
 import { ACCEPTED_IMG_TYPES, MAX_SIZE } from "../../../_constants/file.constants.ts";
 import { showErrorToast, showSuccessToast } from "../../../_helpers/toasts.helper.ts";
@@ -27,7 +31,6 @@ export default function CreatePost({ onSuccess }: CreatePostProps) {
   const [fileImages, setFileImages] = useState<File[]>([]);
   const [imagesBase64, setBase64Images] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const form = useForm<CreatePostRequest>({
     initialValues: {
       content: "",
@@ -53,12 +56,10 @@ export default function CreatePost({ onSuccess }: CreatePostProps) {
 
   const handleSubmit = async (createPostRequest: CreatePostRequest) => {
     setIsSubmitting(true);
-
     const processedImages = fileImages.map((file, index) => ({
       name: file.name,
       base64: imagesBase64[index].split(",")[1],
     }));
-
     await createPost({ ...createPostRequest, images: processedImages })
       .then(async () => {
         showSuccessToast("Post created successfully");
@@ -68,9 +69,8 @@ export default function CreatePost({ onSuccess }: CreatePostProps) {
         await onSuccess();
       })
       .catch(() => showErrorToast());
-
     setIsSubmitting(false);
-  }
+  };
 
   return (
     <Paper p="md" shadow="xs" mb="md" withBorder>
@@ -88,9 +88,9 @@ export default function CreatePost({ onSuccess }: CreatePostProps) {
           maxSize={MAX_SIZE}
           mb="sm"
         >
-          <Typography variant="h6" align="center" color="textSecondary">
+          <Text fw={500} c="dimmed" size="lg">
             <FaUpload /> Upload Images
-          </Typography>
+          </Text>
         </Dropzone>
         {imagesBase64.length > 0 && (
           <Grid gutter="sm" mb="sm">

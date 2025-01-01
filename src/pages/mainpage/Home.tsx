@@ -1,15 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
-import Typography from "@mui/material/Typography";
-import Pagination from "@mui/material/Pagination";
-import Post from "../posts/components/Post.tsx";
 import { getAllMainPagePosts, PostResponse, PostFilterVisibility } from "../posts/api.ts";
+import Post from "../posts/components/Post.tsx";
 import UserSearchBar from "./components/UserSearchBar.tsx";
-import { Loader, Container, Center, Flex } from "@mantine/core";
+import { Loader, Container, Center, Flex, Text, Pagination } from "@mantine/core";
 import CreatePost from "../posts/components/CreatePost.tsx";
 
 export default function Home() {
   const pageSize = 2;
-
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [posts, setPosts] = useState<PostResponse[]>([]);
@@ -46,10 +43,7 @@ export default function Home() {
       <CreatePost onSuccess={fetchPosts} />
       {postsLoading && <Loader size="xl" />}
       {!postsLoading && posts.length > 0 ? (
-        <Flex wrap="wrap"
-              justify="content"
-              gap="md"
-        >
+        <Flex wrap="wrap" justify="center" gap="md">
           {posts.map((post) => (
             <Post
               key={post.postId}
@@ -64,15 +58,15 @@ export default function Home() {
           ))}
         </Flex>
       ) : (
-        <Typography variant="h6" align="center" color="textSecondary">
+        <Text size="lg" c="dimmed">
           Nothing here
-        </Typography>
+        </Text>
       )}
       <Center>
         <Pagination
-          count={totalPages}
-          page={page}
-          onChange={(_, value) => setPage(value)}
+          total={totalPages}
+          value={page}
+          onChange={setPage}
         />
       </Center>
     </Container>

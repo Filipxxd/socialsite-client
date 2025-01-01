@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Card, Text, Button, Group, Badge, LoadingOverlay } from '@mantine/core';
-import { Box } from '@mui/material';
 import {getReportsMocked, ReportResponse} from './api.ts';
 
 const ReportPage: React.FC = () => {
@@ -19,11 +18,11 @@ const ReportPage: React.FC = () => {
     return (
         <Container>
             <LoadingOverlay visible={loading} />
-            <Box mb="lg">
+            <div>
                 <Text variant="h4" mb="md">
                     Report List
                 </Text>
-            </Box>
+            </div>
             {reports.length === 0 ? (
                 <Text color="gray">
                     No reports available.

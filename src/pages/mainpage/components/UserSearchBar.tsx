@@ -1,7 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { TextInput, Loader, Avatar, Group } from '@mantine/core';
+import { TextInput, Loader, Avatar, Group, Paper } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
-import { Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { searchUsers, SearchUserResponse } from '../api';
 import { UserProfileRoute } from '../../../_constants/routes.constants.ts';
@@ -21,13 +20,11 @@ function SearchBar() {
     const fetchResults = async () => {
       if (debouncedValue.length < 2) return;
       setLoading(true);
-
       await searchUsers(debouncedValue)
         .then((res) => setResults(res.data.items))
         .catch(() => showErrorToast())
         .finally(() => setLoading(false));
     };
-
     void fetchResults();
   }, [debouncedValue]);
 
@@ -55,7 +52,10 @@ function SearchBar() {
               className={styles.group}
               onMouseDown={(event) => handleMouseDown(event, user.username)}
             >
-              <Avatar src={`${API_BASE_URL}${user.profilePicturePath}`} alt={user.fullname} />
+              <Avatar
+                src={`${API_BASE_URL}${user.profilePicturePath}`}
+                alt={user.fullname}
+              />
               <div>{user.fullname}</div>
             </Group>
           ))}
