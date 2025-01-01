@@ -12,11 +12,8 @@ import {
   Button,
   ActionIcon,
 } from "@mantine/core";
-import { showNotification } from "@mantine/notifications";
 import { Dropzone } from "@mantine/dropzone";
 import { FaUpload } from "react-icons/fa";
-import { convertFileToBase64 } from "../../_helpers/file.helper.ts";
-import { API_BASE_URL } from "../../_constants/api.constants";
 import {
   MyProfileResponse,
   FriendRequestSetting,
@@ -24,8 +21,10 @@ import {
   updateProfileInfo,
   updateProfileImage
 } from "./api";
+import { convertFileToBase64 } from "../../_helpers/file.helper.ts";
+import { API_BASE_URL } from "../../_constants/api.constants";
 import { ACCEPTED_IMG_TYPES, MAX_SIZE } from "../../_constants/file.constants.ts";
-import { showErrorToast } from "../../_helpers/toasts.helper.ts";
+import { showErrorToast, showSuccessToast } from "../../_helpers/toasts.helper.ts";
 
 const MyProfile = () => {
   const [profile, setProfile] = useState<MyProfileResponse | null>(null);
@@ -60,11 +59,7 @@ const MyProfile = () => {
     if (changesMade) {
       await updateProfileInfo(profile)
         .then(() => {
-          showNotification({
-            title: "Success",
-            message: "Your profile has been updated successfully",
-            color: "teal",
-          });
+          showSuccessToast("Your profile has been updated successfully");
           setOriginalProfile(profile);
         }).catch(() => showErrorToast());
     }
@@ -74,12 +69,7 @@ const MyProfile = () => {
 
       await updateProfileImage(base64String.split(",")[1], selectedImageFile.name)
         .then((res) => {
-          showNotification({
-            title: "Success",
-            message: "Your profile image has been updated successfully",
-            color: "teal",
-          });
-
+          showSuccessToast("Your profile image has been updated successfully");
           setProfile({ ...profile, profilePicturePath: res.data.updatedImagePath });
           setPreviewImage(null);
           setSelectedImageFile(null);
