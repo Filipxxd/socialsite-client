@@ -56,12 +56,12 @@ authAxiosInstance.interceptors.request.use(
     let token = getAccessToken();
 
     if (token && isAccessTokenExpired(token)) {
-      token = await refreshAccessToken();
-
-      if (!token) {
-        emit('logout');
-        return Promise.reject("Session expired");
-      }
+      await refreshAccessToken()
+        .then((newToken) => token = newToken)
+        .catch(() => {
+          emit('logout');
+          return Promise.reject("Session expired");
+        });
     }
 
     if (token)
