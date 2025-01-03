@@ -1,5 +1,6 @@
 import authAxiosInstance from "../../_auth/authAxios.ts";
 import { CommentResponse } from "../comments/api.ts";
+import { PaginatedResponse } from "../../_helpers/pagination.helper.ts";
 
 export enum PostVisibility {
     Everyone = "Everyone",
@@ -49,11 +50,6 @@ export type PostResponse = {
     comments: CommentResponse[];
 }
 
-export type PaginatedResponse = {
-  totalRecords: number;
-  items: PostResponse[];
-}
-
 export type PaginationRequest = {
   pageNumber: number;
   pageSize: number;
@@ -82,5 +78,5 @@ export const getAllMainPagePosts = async (filter: PostFilter) => {
       ...(filter.onlyCurrentUser !== undefined && { OnlyCurrentUser: filter.onlyCurrentUser.toString() })
     });
 
-    return await authAxiosInstance.get<PaginatedResponse>(`/api/posts/get-all?${params}`);
+    return await authAxiosInstance.get<PaginatedResponse<PostResponse>>(`/api/posts/get-all?${params}`);
 };
