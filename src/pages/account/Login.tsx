@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import { useNavigate } from "react-router-dom";
 import { HomeRoute } from "../../_constants/routes.constants";
-import { login as loginUser, LoginRequest } from "./api";
+import { login as loginUser, LoginRequest } from "../../_api/account.api.ts";
 import { useAuth } from "../../_auth/AuthContext.tsx";
 import { showErrorToast, showSuccessToast } from "../../_helpers/toasts.helper.ts";
 

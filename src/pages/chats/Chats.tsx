@@ -9,7 +9,7 @@ import {
 } from "@mantine/core";
 import { useState, useEffect } from "react";
 import Chat from "./components/Chat.tsx";
-import { getChats, ChatResponse } from "./api.ts";
+import { getChats, ChatResponse } from "../../_api/chats.api.ts";
 
 const Chats = () => {
   const [selectedChat, setSelectedChat] = useState<ChatResponse | null>(null);

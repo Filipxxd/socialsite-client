@@ -3,7 +3,7 @@ import { Avatar, Text, Button, Group, Paper, Flex } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 import { FaRegCommentDots, FaFlag } from "react-icons/fa";
 import styles from './Post.module.css';
-import { PostResponse } from "../api.ts";
+import { PostResponse } from "../../../_api/posts.api.ts";
 import PostComments from "../../comments/components/PostComments.tsx";
 import { getPathOrNull } from "../../../_helpers/file.helper.ts";
 

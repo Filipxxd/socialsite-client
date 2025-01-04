@@ -18,7 +18,7 @@ import {
   createPost,
   CreatePostRequest,
   PostVisibility,
-} from "../api.ts";
+} from "../../../_api/posts.api.ts";
 import { convertFilesToBase64 } from "../../../_helpers/file.helper.ts";
 import { ACCEPTED_IMG_TYPES, MAX_SIZE } from "../../../_constants/file.constants.ts";
 import { showErrorToast, showSuccessToast } from "../../../_helpers/toasts.helper.ts";

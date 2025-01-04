@@ -14,12 +14,12 @@ import {
   Box,
 } from "@mantine/core";
 import { FiCheck, FiMessageSquare, FiSend, FiUserPlus } from "react-icons/fi";
-import { getUserProfile, UserProfileResponse } from "./api";
+import { getUserProfile, UserProfileResponse } from "../../_api/users.api.ts";
 import { showErrorToast, showSuccessToast } from "../../_helpers/toasts.helper.ts";
 import { HomeRoute } from "../../_constants/routes.constants.ts";
 import { useAuth } from "../../_auth/AuthContext.tsx";
 import { getPathOrNull } from "../../_helpers/file.helper.ts";
-import { FriendState, revokeFriendRequest, sendFriendRequest } from "../friends/api.ts";
+import { FriendState, revokeFriendRequest, sendFriendRequest } from "../../_api/friends.api.ts";
 import PostsList from "../posts/PostList.tsx";
 
 function UserProfile() {

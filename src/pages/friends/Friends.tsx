@@ -3,7 +3,7 @@ import { Tabs, Container } from '@mantine/core';
 import { LuMailQuestion } from "react-icons/lu";
 import FriendsList from "./components/FriendsList.tsx";
 import FriendRequestsList from "./components/FriendRequestsList.tsx";
-import { FriendRequestResponse, FriendResponse, getFriendRequests, getFriends } from "./api.ts";
+import { FriendRequestResponse, FriendResponse, getFriendRequests, getFriends } from "../../_api/friends.api.ts";
 import { FaUserFriends } from "react-icons/fa";
 
 const Friends: React.FC = () => {

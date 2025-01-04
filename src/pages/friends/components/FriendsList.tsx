@@ -1,6 +1,6 @@
 ﻿import React, { Dispatch, SetStateAction } from "react";
 import { Card, Stack, Group, Text, ActionIcon, Avatar, Flex, Box, ScrollArea } from "@mantine/core";
-import { removeFriend, FriendResponse } from "../api.ts";
+import { removeFriend, FriendResponse } from "../../../_api/friends.api.ts";
 import { useModals } from "@mantine/modals";
 import { getPathOrNull } from "../../../_helpers/file.helper.ts";
 import { showErrorToast, showSuccessToast } from "../../../_helpers/toasts.helper.ts";

@@ -2,7 +2,7 @@
 import { TextInput, Loader, Avatar, Group, Paper } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { useNavigate } from 'react-router-dom';
-import { searchUsers, SearchUserResponse } from '../api';
+import { searchUsers, SearchUserResponse } from '../../../_api/users.api.ts';
 import { UserProfileRoute } from '../../../_constants/routes.constants.ts';
 import { showErrorToast } from '../../../_helpers/toasts.helper.ts';
 import styles from './UserSearchBar.module.css';

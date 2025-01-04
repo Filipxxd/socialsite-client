@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Card, Text, Button, Group, Badge, LoadingOverlay } from '@mantine/core';
-import {getReportsMocked, ReportResponse} from './api.ts';
+import {getReportsMocked, ReportResponse} from '../../_api/reports.api.ts';
 
 const ReportPage: React.FC = () => {
     const [reports, setReports] = useState<ReportResponse[]>([]);

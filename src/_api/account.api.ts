@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
-import authAxios from "../../_auth/authAxios.ts";
-import { API_BASE_URL } from '../../_constants/api.constants';
+import authAxios from "../_auth/authAxios.ts";
+import { API_BASE_URL } from '../_constants/api.constants.ts';
 
 export type LoginRequest = {
   username: string;

@@ -1,6 +1,6 @@
 ﻿import { Dispatch, SetStateAction } from "react";
 import { Card, Stack, Group, Button, Text, Avatar, Flex, Box, ScrollArea } from "@mantine/core";
-import { resolveFriendRequest, FriendRequestResponse } from "../api.ts";
+import { resolveFriendRequest, FriendRequestResponse } from "../../../_api/friends.api.ts";
 import { getPathOrNull } from "../../../_helpers/file.helper.ts";
 import { showErrorToast, showSuccessToast } from "../../../_helpers/toasts.helper.ts";
 import NoDataFound from "../../../shared/NoDataFound.tsx";

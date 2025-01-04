@@ -2,7 +2,7 @@
 import Post from "./components/Post.tsx";
 import NoDataFound from "../../shared/NoDataFound.tsx";
 import { MutableRefObject, useCallback, useEffect, useState } from "react";
-import { getAllMainPagePosts, PostFilterVisibility, PostResponse } from "./api.ts";
+import { getAllMainPagePosts, PostFilterVisibility, PostResponse } from "../../_api/posts.api.ts";
 
 export type PostListProps = {
   userId?: number| undefined;

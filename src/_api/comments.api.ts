@@ -1,4 +1,4 @@
-﻿import authAxiosInstance from "../../_auth/authAxios.ts";
+﻿import authAxiosInstance from "../_auth/authAxios.ts";
 
 export type CommentRequest = {
   postId: number;

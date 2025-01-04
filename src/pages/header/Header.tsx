@@ -20,7 +20,7 @@ import {
   MyProfileRoute,
 } from "../../_constants/routes.constants.ts";
 import { getRefreshToken, removeTokens } from "../../_auth/tokenManager.ts";
-import { logout as apiLogout } from "../account/api";
+import { logout as apiLogout } from "../../_api/account.api.ts";
 import { FaUserFriends, FaUserCircle } from "react-icons/fa";
 import { IoChatbox } from "react-icons/io5";
 import classes from "./Header.module.css";

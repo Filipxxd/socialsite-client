@@ -1,7 +1,22 @@
 ﻿import { AxiosResponse } from "axios";
-import authAxiosInstance from "../../_auth/authAxios.ts";
-import { PostResponse } from "../posts/api.ts";
-import { FriendState } from "../friends/api.ts";
+import authAxiosInstance from "../_auth/authAxios.ts";
+import { FriendState } from "./friends.api.ts";
+import { PostResponse } from "./posts.api.ts";
+
+export type SearchUsersResponse = {
+  totalRecordsCount: number;
+  items: SearchUserResponse[];
+}
+
+export type SearchUserResponse = {
+  username: string;
+  fullname: string;
+  profilePicturePath: string | null;
+}
+
+export const searchUsers = async (searchTerm: string): Promise<AxiosResponse<SearchUsersResponse>> => {
+  return await authAxiosInstance.get(`/api/users/search?searchTerm=${searchTerm}`);
+};
 
 export enum FriendRequestSetting {
   AnyOne = 'Anyone',

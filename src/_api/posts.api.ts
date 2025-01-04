@@ -1,6 +1,6 @@
-import authAxiosInstance from "../../_auth/authAxios.ts";
-import { CommentResponse } from "../comments/api.ts";
-import { PaginatedResponse } from "../../_helpers/pagination.helper.ts";
+import authAxiosInstance from "../_auth/authAxios.ts";
+import { CommentResponse } from "./comments.api.ts";
+import { PaginatedResponse } from "../_helpers/pagination.helper.ts";
 
 export enum PostVisibility {
     Everyone = "Everyone",
@@ -48,11 +48,6 @@ export type PostResponse = {
     content: string;
     images: { name: string, base64: string }[];
     comments: CommentResponse[];
-}
-
-export type PaginationRequest = {
-  pageNumber: number;
-  pageSize: number;
 }
 
 export enum PostFilterVisibility

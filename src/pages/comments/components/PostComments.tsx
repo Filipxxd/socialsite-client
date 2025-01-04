@@ -13,7 +13,7 @@ import { FaTrash } from "react-icons/fa6";
 import { IoSendSharp } from "react-icons/io5";
 import { showErrorToast, showSuccessToast } from "../../../_helpers/toasts.helper.ts";
 import { formatDate } from "../../../_helpers/date.helper.ts";
-import { CommentRequest, CommentResponse, createComment, deleteComment } from "../api.ts";
+import { CommentRequest, CommentResponse, createComment, deleteComment } from "../../../_api/comments.api.ts";
 import { getPathOrNull } from "../../../_helpers/file.helper.ts";
 
 type PostCommentsProps = {

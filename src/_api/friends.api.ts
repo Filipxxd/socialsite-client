@@ -1,4 +1,4 @@
-﻿import authAxiosInstance from '../../_auth/authAxios.ts';
+﻿import authAxiosInstance from '../_auth/authAxios.ts';
 import { AxiosResponse } from "axios";
 
 export enum FriendState {
