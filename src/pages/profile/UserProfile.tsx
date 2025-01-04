@@ -8,22 +8,18 @@ import {
   Container,
   Loader,
   Stack,
-  Group,
   Title,
-  Tooltip, Flex
+  Flex,
+  Divider,
+  Box,
 } from "@mantine/core";
 import { FiCheck, FiMessageSquare, FiSend, FiUserPlus } from "react-icons/fi";
-import {
-  FriendState,
-  getUserProfile,
-  UserProfileResponse,
-  sendFriendRequest,
-  revokeFriendRequest,
-} from "./api";
+import { getUserProfile, UserProfileResponse } from "./api";
 import { showErrorToast, showSuccessToast } from "../../_helpers/toasts.helper.ts";
 import { HomeRoute } from "../../_constants/routes.constants.ts";
 import { useAuth } from "../../_auth/AuthContext.tsx";
 import { getPathOrNull } from "../../_helpers/file.helper.ts";
+import { FriendState, revokeFriendRequest, sendFriendRequest } from "../friends/api.ts";
 
 function UserProfile() {
   const { username } = useParams();
@@ -76,40 +72,41 @@ function UserProfile() {
     switch (user.friendState) {
       case FriendState.Friends:
         return (
-          <Text>
-            <FiCheck size={20} style={{ marginRight: 8 }} />
+          <Button
+            variant="outline"
+            color="green"
+            leftSection={<FiCheck />}
+            disabled
+          >
             Friends
-          </Text>
+          </Button>
         );
       case FriendState.CanSendRequest:
         return (
-          <Button onClick={() => handleAddFriend(user.userId)} color="green">
-            <FiUserPlus size={20} style={{ marginRight: 8 }} />
+          <Button
+            onClick={() => handleAddFriend(user.userId)}
+            color="blue"
+            leftSection={<FiUserPlus />}
+          >
             Add as Friend
           </Button>
         );
-      case FriendState.CannotSendRequest:
-        return (
-          <Tooltip label="Can't add as friend" position="top" withArrow>
-            <Button color="gray" disabled>
-              <FiUserPlus size={20} style={{ marginRight: 8 }} />
-              Add as Friend
-            </Button>
-          </Tooltip>
-        );
       case FriendState.RequestSent:
         return (
-          <Text>
-            <FiSend size={20} style={{ marginRight: 8 }} onClick={() => handleRevokeFriendRequest(user?.userId)} />
+          <Button
+            variant="outline"
+            color="gray"
+            leftSection={<FiSend />}
+            onClick={() => handleRevokeFriendRequest(user?.userId)}
+          >
             Request Sent
-          </Text>
+          </Button>
         );
       case FriendState.RequestReceived:
         return (
-          <Text>
-            <FiSend size={20} style={{ marginRight: 8 }} />
-            Request Received
-          </Text>
+          <Button variant="outline" color="green" leftSection={<FiSend />} >
+            Accept Request
+          </Button>
         );
       default:
         return null;
@@ -118,28 +115,38 @@ function UserProfile() {
 
   return (
     <Container size="sm" p="md">
-      <Card shadow="lg" padding="xl" radius={1}>
-        <Stack>
-          <Group align="center">
+      <Card shadow="lg" padding="lg" radius="md" withBorder>
+        <Stack p="lg">
+          <Flex p="sm">
             <Avatar
               src={getPathOrNull(user.profilePicturePath)}
               alt={user.fullname}
               size="xl"
-              radius="lg"
+              radius="xl"
             />
-            <Title order={2}>{user.fullname}</Title>
-          </Group>
+            <Flex direction="column"
+                  justify="flex-start"
+                  align="start"
+                  px="md">
+              <Title order={2}>{user.fullname}</Title>
+              {user.bio && (
+                <Box py="xs">
+                  <Text size="sm" c="dimmed">{user.bio}</Text>
+                </Box>
+              )}
+            </Flex>
+          </Flex>
 
-          <Flex align="center" justify={"space-around"}>
+          <Divider />
+          <Flex justify="center" align="center" gap="md">
             <Button
-              leftSection={<FiMessageSquare size={20} />}
-              onClick={() => handleChat(user.userId)}>
+              leftSection={<FiMessageSquare />}
+              onClick={() => handleChat(user.userId)}
+            >
               Chat Now
             </Button>
             {renderFriendButton()}
           </Flex>
-
-          {user.bio && <Text size="sm" c={"dimmed"}>{user.bio}</Text>}
         </Stack>
       </Card>
     </Container>

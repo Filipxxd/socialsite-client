@@ -1,6 +1,7 @@
 ﻿import { AxiosResponse } from "axios";
 import authAxiosInstance from "../../_auth/authAxios.ts";
 import { PostResponse } from "../posts/api.ts";
+import { FriendState } from "../friends/api.ts";
 
 export enum FriendRequestSetting {
   AnyOne = 'Anyone',
@@ -40,14 +41,6 @@ export const updateProfileImage = async (imageData: string, fileName: string): P
   });
 };
 
-export enum FriendState {
-  Friends = 'Friends',
-  CanSendRequest = 'CanSendRequest',
-  CannotSendRequest = 'CannotSendRequest',
-  RequestSent = 'RequestSent',
-  RequestReceived = 'RequestReceived',
-}
-
 export type UserProfileResponse = {
   userId: number;
   fullname: string;
@@ -59,12 +52,4 @@ export type UserProfileResponse = {
 
 export const getUserProfile = async (username: string): Promise<AxiosResponse<UserProfileResponse>> => {
   return await authAxiosInstance.get(`/api/users/profile/${username}`);
-}
-
-export const sendFriendRequest = async (userId: number): Promise<AxiosResponse> => {
-  return await authAxiosInstance.post(`/api/friends/send-request/${userId}`);
-}
-
-export const revokeFriendRequest = async (userId: number): Promise<AxiosResponse> => {
-  return await authAxiosInstance.delete(`/api/friends/revoke-request/${userId}`);
 }
