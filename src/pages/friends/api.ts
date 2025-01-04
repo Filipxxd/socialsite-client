@@ -1,6 +1,13 @@
 ﻿import authAxiosInstance from '../../_auth/authAxios.ts';
 import { AxiosResponse } from "axios";
 
+export enum FriendState {
+  Friends = 'Friends',
+  CanSendRequest = 'CanSendRequest',
+  RequestSent = 'RequestSent',
+  RequestReceived = 'RequestReceived',
+}
+
 export type FriendResponse = {
   friendId: number;
   friendFullname: string;
@@ -9,7 +16,7 @@ export type FriendResponse = {
 }
 
 export const getFriends = async (): Promise<AxiosResponse<FriendResponse[]>> => {
-  return await authAxiosInstance.get<FriendResponse[]>('/api/friends/get-all-friends');
+  return await authAxiosInstance.get<FriendResponse[]>('/api/friends');
 };
 
 export type FriendRequestResponse = {
@@ -20,35 +27,29 @@ export type FriendRequestResponse = {
 }
 
 export const getFriendRequests = async (): Promise<AxiosResponse<FriendRequestResponse[]>> => {
-  return await authAxiosInstance.get<FriendRequestResponse[]>('/api/friends/get-all-friend-requests');
-};
-
-export type FriendRequest = {
-  receiverId: number;
-}
-
-export const sendFriendRequest = async (data: FriendRequest): Promise<AxiosResponse> => {
-  return await authAxiosInstance.post('/api/friends/send-request', {
-    ReceiverId: data.receiverId
-  });
+  return await authAxiosInstance.get<FriendRequestResponse[]>('/api/friends/requests');
 };
 
 export type ResolveFriendRequest = {
   friendRequestId: number;
-  accept: boolean;
+  isAccept: boolean;
 }
 
 export const resolveFriendRequest = async (data: ResolveFriendRequest): Promise<AxiosResponse> => {
-  return await authAxiosInstance.put('/api/friends/resolve-request', {
-    Id: data.friendRequestId,
-    IsAccepted: data.accept
+  return await authAxiosInstance.put('/api/friends/request', {
+    FriendRequestId: data.friendRequestId,
+    IsAccepted: data.isAccept
   });
 };
 
-export type RemoveFriendRequest = {
-  friendId: number;
+export const removeFriend = async (friendId: number): Promise<AxiosResponse> => {
+  return await authAxiosInstance.delete(`/api/friends/${friendId}`);
+};
+
+export const sendFriendRequest = async (userId: number): Promise<AxiosResponse> => {
+  return await authAxiosInstance.post(`/api/friends/request/${userId}`);
 }
 
-export const removeFriend = async (friendId: number): Promise<AxiosResponse> => {
-  return await authAxiosInstance.delete(`/api/friends/remove-friend/${friendId}`);
-};
+export const revokeFriendRequest = async (userId: number): Promise<AxiosResponse> => {
+  return await authAxiosInstance.delete(`/api/friends/request/${userId}`);
+}
