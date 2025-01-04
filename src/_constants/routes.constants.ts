@@ -6,3 +6,4 @@ export const FriendsRoute = "/friends";
 export const MyProfileRoute = "/my-profile";
 export const UserProfileRoute = "/profile";
 export const ReportsRoute = "/reports";
+export const UserManagerRoute = "/users";

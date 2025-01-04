@@ -12,10 +12,12 @@ import {
   FriendsRoute,
   MyProfileRoute,
   UserProfileRoute,
+  UserManagerRoute,
   ReportsRoute
 } from "../_constants/routes.constants";
 import UserProfile from "../pages/profile/UserProfile.tsx";
 import Reports from "../pages/reports/Reports.tsx";
+import UserManager from "../pages/users/UserManager.tsx";
 
 type RouteType = {
   path: string;
@@ -56,6 +58,11 @@ export const ROUTES: RouteType[] = [
     path: ReportsRoute,
     requiresAuth: false, // TODO: Setup admin auth claim check
     component: <Reports />,
+  },
+  {
+    path: UserManagerRoute,
+    requiresAuth: false, // TODO: Setup admin auth claim check
+    component: <UserManager />,
   },
   // Public routes
   {

@@ -17,7 +17,7 @@ import {
   RegisterRoute,
   FriendsRoute,
   HomeRoute,
-  MyProfileRoute,
+  MyProfileRoute, UserManagerRoute
 } from "../../_constants/routes.constants.ts";
 import { getRefreshToken, removeTokens } from "../../_auth/tokenManager.ts";
 import { logout as apiLogout } from "../../_api/account.api.ts";
@@ -25,6 +25,7 @@ import { FaUserFriends, FaUserCircle } from "react-icons/fa";
 import { IoChatbox } from "react-icons/io5";
 import classes from "./Header.module.css";
 import { showSuccessToast } from "../../_helpers/toasts.helper.ts";
+import { FaUsers } from "react-icons/fa6";
 
 function Header() {
   const [menuOpened, { toggle: toggleMenu, close: closeMenu }] = useDisclosure(false);
@@ -34,8 +35,11 @@ function Header() {
   const handleLogout = async () => {
     const refreshToken = getRefreshToken();
 
-    if (refreshToken)
-      await apiLogout(refreshToken);
+    if (refreshToken){
+      try{
+        await apiLogout(refreshToken);
+      }catch{}
+    }
 
     removeTokens();
     contextLogout();
@@ -88,6 +92,9 @@ function Header() {
             </NavLinkDesktop>
             <NavLinkDesktop to={ChatsRoute} label="Chats">
               <IoChatbox />
+            </NavLinkDesktop>
+            <NavLinkDesktop to={UserManagerRoute} label="Users">
+              <FaUsers />
             </NavLinkDesktop>
           </Group>
         )}
@@ -146,6 +153,10 @@ function Header() {
 
             <NavLinkMobile to={ChatsRoute} label="Chats">
               <IoChatbox />
+            </NavLinkMobile>
+
+            <NavLinkMobile to={UserManagerRoute} label="Users">
+              <FaUsers />
             </NavLinkMobile>
 
             <Divider my="sm" />

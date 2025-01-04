@@ -26,13 +26,13 @@ export const searchUsers = async (filter: SearchUsersRequest) => {
   const params = new URLSearchParams({
     PageSize: filter.pageSize.toString(),
     PageNumber: filter.pageNumber.toString(),
-    ...(filter.searchTerm && { Visibility: filter.searchTerm }),
+    ...(filter.searchTerm && { SearchTerm: filter.searchTerm }),
   });
 
   return await authAxiosInstance.get<SearchUsersResponse>(`/api/users/search?${params}`);
 };
 
-export const banUser = async (userId: number, banned: boolean) => {
+export const updateBanState = async (userId: number, banned: boolean) => {
   return await authAxiosInstance.patch(`/api/users/${userId}?banned=${banned}`);
 }
 
@@ -42,9 +42,20 @@ export enum UserRole {
   User = "User",
 }
 
-export const changeUserRole = async (userId: number, role: UserRole) => {
-  return await authAxiosInstance.patch(`/api/users/${userId}/role?role=${role}`);
+export const updateUserRole = async (userId: number, role: UserRole) => {
+  return await authAxiosInstance.patch(`/api/users/role`, {
+    Role: role,
+    UserId: userId
+  });
 }
+
+export const updateUsername = async (userId: number, username: string) => {
+  return await authAxiosInstance.patch(`/api/users/username`, {
+    NewUsername: username,
+    UserId: userId
+  });
+}
+
 
 export enum FriendRequestSetting {
   AnyOne = 'Anyone',

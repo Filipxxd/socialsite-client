@@ -7,6 +7,7 @@ import { UserProfileRoute } from '../../../_constants/routes.constants.ts';
 import { showErrorToast } from '../../../_helpers/toasts.helper.ts';
 import styles from './UserSearchBar.module.css';
 import { getPathOrNull } from "../../../_helpers/file.helper.ts";
+import { FaXmark } from "react-icons/fa6";
 
 function SearchBar() {
   const [searchValue, setSearchValue] = useState('');
@@ -43,6 +44,7 @@ function SearchBar() {
         placeholder="Search users..."
         value={searchValue}
         radius={8}
+        rightSection={<FaXmark size={20} onClick={() => setSearchValue("")} cursor="pointer" />}
         onChange={(event) => setSearchValue(event.currentTarget.value)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
