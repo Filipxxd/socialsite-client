@@ -2,8 +2,9 @@ import { useState, useEffect, useCallback } from "react";
 import { getAllMainPagePosts, PostResponse, PostFilterVisibility } from "../posts/api.ts";
 import Post from "../posts/components/Post.tsx";
 import UserSearchBar from "./components/UserSearchBar.tsx";
-import { Loader, Container, Center, Flex, Text, Pagination } from "@mantine/core";
+import { Loader, Container, Center, Flex, Pagination } from "@mantine/core";
 import CreatePost from "../posts/components/CreatePost.tsx";
+import NoDataFound from "../../shared/NoDataFound.tsx";
 
 export default function Home() {
   const pageSize = 5;
@@ -53,9 +54,7 @@ export default function Home() {
           ))}
         </Flex>
       ) : (
-        <Text size="lg" c="dimmed">
-          Nothing here
-        </Text>
+        <NoDataFound title={"No posts to display"} message={"Try adding some friends"}/>
       )}
       <Center>
         <Pagination
