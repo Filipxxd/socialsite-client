@@ -9,7 +9,7 @@ import {
   TextInput, Divider
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { FaRegTrashAlt } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa6";
 import { IoSendSharp } from "react-icons/io5";
 import { showErrorToast, showSuccessToast } from "../../../_helpers/toasts.helper.ts";
 import { formatDate } from "../../../_helpers/date.helper.ts";
@@ -95,7 +95,7 @@ export default function PostComments({ commentsInput, postId }: PostCommentsProp
                   variant="subtle"
                   onClick={() => handleDeleteComment(comment.commentId)}
                   size="sm"
-                  children={<FaRegTrashAlt />}
+                  children={<FaTrash />}
                 />
               )}
             </Flex>

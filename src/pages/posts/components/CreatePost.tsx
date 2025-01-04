@@ -12,7 +12,7 @@ import {
   Text, Center
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { FaRegTrashAlt, FaUpload, FaGlobe } from "react-icons/fa";
+import { FaTrash, FaUpload, FaGlobe } from "react-icons/fa6";
 import { Dropzone } from "@mantine/dropzone";
 import {
   createPost,
@@ -105,7 +105,7 @@ export default function CreatePost({ onSuccess }: CreatePostProps) {
                     style={{ position: "absolute", top: 5, right: 5 }}
                     onClick={() => removeImage(idx)}
                   >
-                    <FaRegTrashAlt size={16} />
+                    <FaTrash size={16} />
                   </ActionIcon>
                 </Box>
               </Grid.Col>
