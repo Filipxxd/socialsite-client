@@ -20,6 +20,7 @@ import { HomeRoute } from "../../_constants/routes.constants.ts";
 import { useAuth } from "../../_auth/AuthContext.tsx";
 import { getPathOrNull } from "../../_helpers/file.helper.ts";
 import { FriendState, revokeFriendRequest, sendFriendRequest } from "../friends/api.ts";
+import PostsList from "../posts/PostList.tsx";
 
 function UserProfile() {
   const { username } = useParams();
@@ -148,7 +149,9 @@ function UserProfile() {
             {renderFriendButton()}
           </Flex>
         </Stack>
+
       </Card>
+        <PostsList userId={user.userId} onlyCurrentUser={false} />
     </Container>
   );
 }

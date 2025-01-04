@@ -24,6 +24,7 @@ import {
 import { convertFileToBase64, getPathOrNull } from "../../_helpers/file.helper.ts";
 import { ACCEPTED_IMG_TYPES, MAX_SIZE } from "../../_constants/file.constants.ts";
 import { showErrorToast, showSuccessToast } from "../../_helpers/toasts.helper.ts";
+import PostsList from "../posts/PostList.tsx";
 
 const MyProfile = () => {
   const [profile, setProfile] = useState<MyProfileResponse | null>(null);
@@ -160,6 +161,7 @@ const MyProfile = () => {
             />
             <Textarea
               label="Bio"
+              rows={3}
               value={profile.bio ?? ""}
               w="100%"
               onChange={(e) =>
@@ -177,6 +179,8 @@ const MyProfile = () => {
           </Stack>
         </Grid.Col>
       </Grid>
+
+      <PostsList onlyCurrentUser={true} />
     </Container>
   );
 };

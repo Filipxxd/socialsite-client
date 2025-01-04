@@ -74,8 +74,8 @@ export const getAllMainPagePosts = async (filter: PostFilter) => {
       PageSize: filter.pageSize.toString(),
       PageNumber: filter.pageNumber.toString(),
       ...(filter.visibility && { Visibility: filter.visibility.toString() }),
-      ...(filter.userId !== undefined && { UserId: filter.userId.toString() }),
-      ...(filter.onlyCurrentUser !== undefined && { OnlyCurrentUser: filter.onlyCurrentUser.toString() })
+      ...(filter.userId && { UserId: filter.userId.toString() }),
+      ...(filter.onlyCurrentUser && { OnlyCurrentUser: filter.onlyCurrentUser.toString() })
     });
 
     return await authAxiosInstance.get<PaginatedResponse<PostResponse>>(`/api/posts/get-all?${params}`);
