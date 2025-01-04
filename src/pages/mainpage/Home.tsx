@@ -13,7 +13,6 @@ export default function Home() {
       <CreatePost onSuccess={async () => refetchPostsRef.current?.()} />
       <PostsList
         refetchPostsRef={refetchPostsRef}
-        userId={null}
         onlyCurrentUser={false}
       />
     </Container>

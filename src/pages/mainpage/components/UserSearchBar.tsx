@@ -2,7 +2,7 @@
 import { TextInput, Loader, Avatar, Group, Paper } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { useNavigate } from 'react-router-dom';
-import { searchUsers, SearchUserResponse } from '../../../_api/users.api.ts';
+import { searchUsers, UserResponse } from '../../../_api/users.api.ts';
 import { UserProfileRoute } from '../../../_constants/routes.constants.ts';
 import { showErrorToast } from '../../../_helpers/toasts.helper.ts';
 import styles from './UserSearchBar.module.css';
@@ -12,7 +12,7 @@ function SearchBar() {
   const [searchValue, setSearchValue] = useState('');
   const [debouncedValue] = useDebouncedValue(searchValue, 300);
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<SearchUserResponse[]>([]);
+  const [results, setResults] = useState<UserResponse[]>([]);
   const [isFocused, setIsFocused] = useState(false);
   const navigate = useNavigate();
 
@@ -20,7 +20,11 @@ function SearchBar() {
     const fetchResults = async () => {
       if (debouncedValue.length < 2) return;
       setLoading(true);
-      await searchUsers(debouncedValue)
+      await searchUsers({
+        pageSize: 3,
+        pageNumber: 1,
+        searchTerm: debouncedValue,
+        })
         .then((res) => setResults(res.data.items))
         .catch(() => showErrorToast())
         .finally(() => setLoading(false));
@@ -48,7 +52,7 @@ function SearchBar() {
         <Paper className={styles.paper}>
           {results.map((user) => (
             <Group
-              key={user.username}
+              key={user.userId}
               className={styles.group}
               onMouseDown={(event) => handleMouseDown(event, user.username)}
             >
