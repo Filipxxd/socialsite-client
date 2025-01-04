@@ -7,6 +7,7 @@ import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 import '@mantine/dropzone/styles.css';
 import '@mantine/carousel/styles.css';
+import { ModalsProvider } from "@mantine/modals";
 
 const myColor: MantineColorsTuple = [
   "#f3edff",
@@ -31,10 +32,12 @@ export const theme = createTheme({
 export default function App() {
   return (
     <MantineProvider theme={theme}>
-      <RouteProvider>
-        <Notifications />
-        <Header />
-      </RouteProvider>
+      <ModalsProvider>
+        <RouteProvider>
+          <Notifications />
+          <Header />
+        </RouteProvider>
+      </ModalsProvider>
     </MantineProvider>
   );
 }
