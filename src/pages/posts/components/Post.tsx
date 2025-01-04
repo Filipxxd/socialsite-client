@@ -6,8 +6,15 @@ import styles from './Post.module.css';
 import { PostResponse } from "../../../_api/posts.api.ts";
 import PostComments from "../../comments/components/PostComments.tsx";
 import { getPathOrNull } from "../../../_helpers/file.helper.ts";
+import { formatDate } from "../../../_helpers/date.helper.ts";
+import { FaTrash } from "react-icons/fa6";
 
-export default function Post(post: PostResponse) {
+type PostProps = {
+  post: PostResponse;
+  postDeleteCallback: (post: PostResponse) => Promise<void>;
+};
+
+export default function Post({ post, postDeleteCallback }: PostProps) {
   const [commentsOpen, setCommentsOpen] = useState(false);
 
   return (
@@ -22,13 +29,22 @@ export default function Post(post: PostResponse) {
           />
           <div>
             <Text size="sm" fw={500}>{post.userFullname}</Text>
-            <Text size="xs" c="dimmed">{new Date(post.dateCreated).toLocaleString()}</Text>
+            <Text size="xs" c="dimmed">{formatDate(post.dateCreated)}</Text>
           </div>
         </Group>
-        <Button
-          size="sm"
-          variant="subtle"
-          children={<FaFlag />} />
+
+        <Flex>
+          <Button
+            size="sm"
+            variant="subtle"
+            children={<FaFlag />} />
+          {post.isDeletable && (
+            <Button
+              size="sm"
+              variant="subtle"
+              onClick={() => postDeleteCallback(post)}
+              children={<FaTrash  />} />)}
+        </Flex>
       </Flex>
       {post.images.length > 0 && (
         <Carousel slideSize="100%" height="100%" slideGap="md" loop withIndicators className={styles.carouselContainer}>

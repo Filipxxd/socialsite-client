@@ -15,19 +15,7 @@ export type CreatePostRequest = {
 }
 
 export const createPost = async (data: CreatePostRequest) => {
-    return await authAxiosInstance.post(`/api/posts/create`, {
-        Content: data.content,
-        Visibility: data.visibility,
-        Images: data.images
-    });
-}
-
-export type UpdatePostRequest = CreatePostRequest & {
-    postId: number;
-}
-
-export const updatePost = async (data: UpdatePostRequest) => {
-    return await authAxiosInstance.put(`/api/posts/${data.postId}`, {
+    return await authAxiosInstance.post(`/api/posts`, {
         Content: data.content,
         Visibility: data.visibility,
         Images: data.images
@@ -46,6 +34,8 @@ export type PostResponse = {
     userProfilePicturePath: string | null;
     dateCreated: Date;
     content: string;
+    isDeletable: boolean;
+    isReportable: boolean;
     images: { name: string, base64: string }[];
     comments: CommentResponse[];
 }
@@ -73,5 +63,5 @@ export const getAllMainPagePosts = async (filter: PostFilter) => {
       ...(filter.onlyCurrentUser && { OnlyCurrentUser: filter.onlyCurrentUser.toString() })
     });
 
-    return await authAxiosInstance.get<PaginatedResponse<PostResponse>>(`/api/posts/get-all?${params}`);
+    return await authAxiosInstance.get<PaginatedResponse<PostResponse>>(`/api/posts?${params}`);
 };

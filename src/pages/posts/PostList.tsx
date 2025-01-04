@@ -1,8 +1,10 @@
-﻿import { Box, Center, Flex, Loader, Pagination } from "@mantine/core";
+﻿import { Box, Center, Flex, Loader, Pagination, Text } from "@mantine/core";
 import Post from "./components/Post.tsx";
 import NoDataFound from "../../shared/NoDataFound.tsx";
 import { MutableRefObject, useCallback, useEffect, useState } from "react";
-import { getAllMainPagePosts, PostFilterVisibility, PostResponse } from "../../_api/posts.api.ts";
+import { deletePost, getAllMainPagePosts, PostFilterVisibility, PostResponse } from "../../_api/posts.api.ts";
+import { modals } from "@mantine/modals";
+import { showErrorToast, showSuccessToast } from "../../_helpers/toasts.helper.ts";
 
 export type PostListProps = {
   userId?: number| undefined;
@@ -35,6 +37,25 @@ export default function PostsList({userId, onlyCurrentUser, refetchPostsRef}: Po
     setPostsLoading(false);
   }, [page, pageSize, userId, onlyCurrentUser]);
 
+  const handlePostDelete = async (post: PostResponse) => {
+    modals.openConfirmModal({
+      title: "Delete post",
+      children: (
+        <Text>Are you sure you want to delete?</Text>
+      ),
+      labels: { confirm: "Delete", cancel: "Cancel" },
+      confirmProps: { color: "red" },
+      onConfirm: async () => {
+        await deletePost(post.postId)
+          .then(() => {
+            setPosts(posts.filter((p) => p.postId !== post.postId));
+            showSuccessToast("Post deleted");
+          })
+          .catch(() => showErrorToast());
+      },
+    });
+  }
+
   useEffect(() => {
     if (refetchPostsRef) {
       refetchPostsRef.current = fetchPosts;
@@ -50,13 +71,8 @@ export default function PostsList({userId, onlyCurrentUser, refetchPostsRef}: Po
           {posts.map((post) => (
             <Post
               key={post.postId}
-              postId={post.postId}
-              userFullname={post.userFullname}
-              userProfilePicturePath={post.userProfilePicturePath}
-              dateCreated={post.dateCreated}
-              content={post.content}
-              images={post.images}
-              comments={post.comments}
+              post={post}
+              postDeleteCallback={handlePostDelete}
             />
           ))}
         </Flex>
