@@ -44,7 +44,7 @@ function SearchBar() {
         placeholder="Search users..."
         value={searchValue}
         radius={8}
-        rightSection={<FaXmark size={20} onClick={() => setSearchValue("")} cursor="pointer" />}
+        rightSection={searchValue && <FaXmark size={20} onClick={() => setSearchValue("")} cursor="pointer" />}
         onChange={(event) => setSearchValue(event.currentTarget.value)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
