@@ -22,7 +22,7 @@ import { ElevatedUsers, RegularUsers, SuperUsers } from "../_constants/roles.con
 
 type RouteType = {
   path: string;
-  requiredRoles: string[];
+  requiredRoles?: string[];
   component: JSX.Element;
 }
 
@@ -67,12 +67,10 @@ export const ROUTES: RouteType[] = [
 
   {
     path: RegisterRoute,
-    requiredRoles: [],
     component: <Register />,
   },
   {
     path: LoginRoute,
-    requiredRoles: [],
     component: <Login />,
   }
 ];
