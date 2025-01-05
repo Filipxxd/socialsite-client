@@ -44,8 +44,8 @@ export default function Login() {
       login(res.data.accessToken, res.data.refreshToken);
       showSuccessToast("Successfully logged in");
       navigate(HomeRoute);
-    }).catch(() => {
-      showErrorToast("Invalid Credentials");
+    }).catch((error) => {
+      showErrorToast(error.response.data.detail);
     });
 
     setIsSubmitting(false);
