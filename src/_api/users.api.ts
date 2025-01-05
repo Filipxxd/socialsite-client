@@ -1,6 +1,8 @@
 ﻿import authAxiosInstance from "../_auth/authAxios.ts";
 import { FriendState } from "./friends.api.ts";
 import { PostResponse } from "./posts.api.ts";
+import axios from "axios";
+import { API_BASE_URL } from "../_constants/api.constants.ts";
 
 export type SearchUsersRequest = {
   searchTerm?: string;
@@ -106,4 +108,12 @@ export type UserProfileResponse = {
 
 export const getUserProfile = async (username: string)=> {
   return await authAxiosInstance.get<UserProfileResponse>(`/api/users/profile/${username}`);
+}
+
+type CheckUsernameAvailabilityResponse = {
+  isAvailable: boolean;
+}
+
+export const checkUsernameAvailability = async (username: string) => {
+  return await axios.get<CheckUsernameAvailabilityResponse>(`${API_BASE_URL}/api/users/username?username=${username}`);
 }

@@ -18,6 +18,7 @@ import { register, RegisterRequest } from "../../_api/account.api.ts";
 import { useAuth } from "../../_auth/AuthContext.tsx";
 import { HomeRoute, LoginRoute } from "../../_constants/routes.constants.ts";
 import { showErrorToast, showSuccessToast } from "../../_helpers/toasts.helper.ts";
+import { checkUsernameAvailability } from "../../_api/users.api.ts";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -38,9 +39,10 @@ export default function Register() {
         if (value.length < 6)
           return "Username must be at least 6 characters long";
 
-        return alphabetNumberRegex.test(value)
-          ? null
-          : "Firstname must contain only characters";
+        if (!alphabetNumberRegex.test(value))
+          return "Firstname must contain only characters";
+
+        return null;
       },
       firstname: (value) => czechAlphabetRegex.test(value)
           ? null
@@ -64,9 +66,17 @@ export default function Register() {
   const handleSubmit = async (values: RegisterRequest) => {
     setIsSubmitting(true);
 
-    await register(values).then(() => {
-      showSuccessToast("You can now log in");
+    const res = await checkUsernameAvailability(values.username);
 
+    if (!res.data.isAvailable) {
+      showErrorToast("Username is already taken");
+      setIsSubmitting(false);
+      return;
+    }
+
+    await register(values)
+      .then(() => {
+        showSuccessToast("You can now log in");
         navigate(LoginRoute);
       })
       .catch(() => {

@@ -25,7 +25,7 @@ import {
   searchUsers,
   UserResponse,
   UserRole,
-  updateUsername,
+  updateUsername, checkUsernameAvailability
 } from "../../_api/users.api.ts";
 import { showErrorToast, showSuccessToast } from "../../_helpers/toasts.helper.ts";
 import BetterLoader from "../../shared/BetterLoader.tsx";
@@ -131,8 +131,15 @@ const UserManager: React.FC = () => {
         <Text>{`Are you sure you want to change the username to ${form.values.username}?`}</Text>
       ),
       labels: { confirm: "Change", cancel: "Cancel" },
-      onConfirm: () => {
-        updateUsername(editingUserId, form.values.username)
+      onConfirm: async () => {
+        const res = await checkUsernameAvailability(form.values.username);
+
+        if (!res.data.isAvailable) {
+          showErrorToast("Username is already taken");
+          return;
+        }
+
+        await updateUsername(editingUserId, form.values.username)
           .then(() => {
             setUsers((currentUsers) =>
               currentUsers.map((u) =>

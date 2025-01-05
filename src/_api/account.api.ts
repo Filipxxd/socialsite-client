@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
-import authAxios from "../_auth/authAxios.ts";
 import { API_BASE_URL } from '../_constants/api.constants.ts';
+import authAxiosInstance from "../_auth/authAxios.ts";
 
 export type LoginRequest = {
   username: string;
@@ -39,7 +39,7 @@ export const register = async (data: RegisterRequest) => {
 }
 
 export const logout = async (refreshToken: string) => {
-  return await authAxios.post(`${API_BASE_URL}/api/account/logout`, {
+  return await authAxiosInstance.post(`/api/account/logout`, {
     Token: refreshToken
   });
 }
