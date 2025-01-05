@@ -101,6 +101,7 @@ const MyProfile = () => {
               maxSize={MAX_SIZE}
               maxFiles={1}
               onDrop={(files) => setSelectedImageFile(files[0])}
+              onReject={() => showErrorToast("Please upload only file(s) in format: " + ACCEPTED_IMG_TYPES.join(", "))}
               style={{
                 position: "absolute",
                 bottom: 60,

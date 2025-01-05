@@ -82,10 +82,11 @@ export default function CreatePost({ onSuccess }: CreatePostProps) {
           {...form.getInputProps("content")}
         />
         <Dropzone
-          onDrop={handleImagesChange}
           accept={ACCEPTED_IMG_TYPES}
           maxFiles={5}
           maxSize={MAX_SIZE}
+          onDrop={handleImagesChange}
+          onReject={() => showErrorToast("Please upload only file(s) in format: " + ACCEPTED_IMG_TYPES.join(", "))}
           mb="sm"
         >
           <Center>
