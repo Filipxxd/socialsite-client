@@ -26,11 +26,12 @@ import { IoChatbox } from "react-icons/io5";
 import classes from "./Header.module.css";
 import { showSuccessToast } from "../../_helpers/toasts.helper.ts";
 import { FaUsers } from "react-icons/fa6";
+import { SuperUsers } from "../../_constants/roles.constants.ts";
 
 function Header() {
   const [menuOpened, { toggle: toggleMenu, close: closeMenu }] = useDisclosure(false);
   const navigate = useNavigate();
-  const { isAuthenticated, username, logout: contextLogout } = useAuth();
+  const { isAuthenticated, username, logout: contextLogout, role } = useAuth();
 
   const handleLogout = async () => {
     const refreshToken = getRefreshToken();
@@ -93,9 +94,12 @@ function Header() {
             <NavLinkDesktop to={ChatsRoute} label="Chats">
               <IoChatbox />
             </NavLinkDesktop>
-            <NavLinkDesktop to={UserManagerRoute} label="Users">
-              <FaUsers />
-            </NavLinkDesktop>
+
+            {SuperUsers.some(r => role === r) && (
+              <NavLinkDesktop to={UserManagerRoute} label="Users">
+                <FaUsers />
+              </NavLinkDesktop>
+            )}
           </Group>
         )}
 

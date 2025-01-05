@@ -20,7 +20,7 @@ export const RouteProvider: React.FC<CustomRouterProviderProps> = ({ children}) 
             key={route.path}
             path={route.path}
             element={
-              route.requiresAuth ? (
+              route.requiredRoles ? (
                 <ProtectedRoute requiredRoles={route.requiredRoles}>
                   {route.component}
                 </ProtectedRoute>

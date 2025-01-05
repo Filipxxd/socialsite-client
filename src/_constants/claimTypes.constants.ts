@@ -1,1 +1,0 @@
-﻿export const ClaimType_Role = "roles";

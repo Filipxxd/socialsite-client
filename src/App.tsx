@@ -33,10 +33,10 @@ export default function App() {
   return (
     <MantineProvider theme={theme}>
       <ModalsProvider>
-        <RouteProvider>
           <Notifications />
-          <Header />
-        </RouteProvider>
+          <RouteProvider>
+            <Header />
+          </RouteProvider>
       </ModalsProvider>
     </MantineProvider>
   );

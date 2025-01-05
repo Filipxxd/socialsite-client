@@ -18,61 +18,61 @@ import {
 import UserProfile from "../pages/profile/UserProfile.tsx";
 import Reports from "../pages/reports/Reports.tsx";
 import UserManager from "../pages/users/UserManager.tsx";
+import { ElevatedUsers, RegularUsers, SuperUsers } from "../_constants/roles.constants.ts";
 
 type RouteType = {
   path: string;
-  requiresAuth: boolean;
-  requiredRoles?: string[];
+  requiredRoles: string[];
   component: JSX.Element;
 }
 
 export const ROUTES: RouteType[] = [
-  // Authorized routes
   {
     path: HomeRoute,
-    requiresAuth: true,
+    requiredRoles: RegularUsers,
     component: <Home />,
   },
   {
     path: FriendsRoute,
-    requiresAuth: true,
+    requiredRoles: RegularUsers,
     component: <Friends />,
   },
   {
     path: ChatsRoute,
-    requiresAuth: true,
+    requiredRoles: RegularUsers,
     component: <Chats />,
   },
   {
     path: MyProfileRoute,
-    requiresAuth: true,
+    requiredRoles: RegularUsers,
     component: <MyProfile />,
   },
   {
     path: `${UserProfileRoute}/:username`,
-    requiresAuth: true,
+    requiredRoles: RegularUsers,
     component: <UserProfile />,
   },
-  // Admin routes
+
   {
     path: ReportsRoute,
-    requiresAuth: false, // TODO: Setup admin auth claim check
+    requiredRoles: ElevatedUsers,
     component: <Reports />,
   },
+
   {
     path: UserManagerRoute,
-    requiresAuth: false, // TODO: Setup admin auth claim check
+    requiredRoles: SuperUsers,
     component: <UserManager />,
   },
-  // Public routes
+
   {
     path: RegisterRoute,
-    requiresAuth: false,
+    requiredRoles: [],
     component: <Register />,
   },
   {
     path: LoginRoute,
-    requiresAuth: false,
+    requiredRoles: [],
     component: <Login />,
   }
 ];

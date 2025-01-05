@@ -5,20 +5,20 @@ import { HomeRoute, LoginRoute } from "../_constants/routes.constants.ts";
 
 type AuthorizedRoute = {
   children: ReactNode;
-  requiredRoles?: string[];
+  requiredRoles: string[];
 }
 
 export const ProtectedRoute = ({
   children,
   requiredRoles,
 }: AuthorizedRoute) => {
-  const { isAuthenticated, roles } = useAuth();
+  const { isAuthenticated, role: userRole } = useAuth();
 
   if (!isAuthenticated)
     return <Navigate to={LoginRoute} replace />;
 
   if (requiredRoles && requiredRoles.length > 0) {
-    const hasRequiredRole = requiredRoles.some((role) => roles.includes(role));
+    const hasRequiredRole = requiredRoles.some((role) => role === userRole);
     if (!hasRequiredRole)
       return <Navigate to={HomeRoute} replace />;
   }

@@ -1,4 +1,7 @@
-﻿export const ADMIN = "Admin";
-export const USER = "User";
+﻿export const Admin = "Admin";
+export const Moderator = "Moderator";
+export const User = "User";
 
-export const ROLES = { AdminRole: ADMIN, UserRole: USER };
+export const SuperUsers = [Admin];
+export const ElevatedUsers = [Admin, Moderator];
+export const RegularUsers = [User, Admin, Moderator];
