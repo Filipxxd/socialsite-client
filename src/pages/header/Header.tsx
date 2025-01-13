@@ -17,16 +17,18 @@ import {
   RegisterRoute,
   FriendsRoute,
   HomeRoute,
-  MyProfileRoute, UserManagerRoute
+  MyProfileRoute,
+  UserManagerRoute,
+  ReportsRoute
 } from "../../_constants/routes.constants.ts";
 import { getRefreshToken, removeTokens } from "../../_auth/tokenManager.ts";
 import { logout as apiLogout } from "../../_api/account.api.ts";
-import { FaUserFriends, FaUserCircle } from "react-icons/fa";
+import { FaUserFriends, FaUserCircle, FaFlag } from "react-icons/fa";
 import { IoChatbox } from "react-icons/io5";
 import classes from "./Header.module.css";
 import { showSuccessToast } from "../../_helpers/toasts.helper.ts";
 import { FaUsers } from "react-icons/fa6";
-import { SuperUsers } from "../../_constants/roles.constants.ts";
+import { ElevatedUsers, SuperUsers } from "../../_constants/roles.constants.ts";
 
 function Header() {
   const [menuOpened, { toggle: toggleMenu, close: closeMenu }] = useDisclosure(false);
@@ -39,7 +41,7 @@ function Header() {
     if (refreshToken){
       try{
         await apiLogout(refreshToken);
-      }catch{}
+      }catch{ /* empty */ }
     }
 
     removeTokens();
@@ -88,9 +90,11 @@ function Header() {
             <NavLinkDesktop to={MyProfileRoute} label="Profile">
               <FaUserCircle />
             </NavLinkDesktop>
+
             <NavLinkDesktop to={FriendsRoute} label="Friends">
               <FaUserFriends />
             </NavLinkDesktop>
+
             <NavLinkDesktop to={ChatsRoute} label="Chats">
               <IoChatbox />
             </NavLinkDesktop>
@@ -98,6 +102,12 @@ function Header() {
             {SuperUsers.some(r => role === r) && (
               <NavLinkDesktop to={UserManagerRoute} label="Users">
                 <FaUsers />
+              </NavLinkDesktop>
+            )}
+
+            {ElevatedUsers.some(r => role === r) && (
+              <NavLinkDesktop to={ReportsRoute} label="Reports">
+                <FaFlag />
               </NavLinkDesktop>
             )}
           </Group>
@@ -159,9 +169,17 @@ function Header() {
               <IoChatbox />
             </NavLinkMobile>
 
-            <NavLinkMobile to={UserManagerRoute} label="Users">
-              <FaUsers />
-            </NavLinkMobile>
+            {SuperUsers.some(r => role === r) && (
+              <NavLinkMobile to={UserManagerRoute} label="Users">
+                <FaUsers />
+              </NavLinkMobile>
+            )}
+
+            {ElevatedUsers.some(r => role === r) && (
+              <NavLinkMobile to={ReportsRoute} label="Reports">
+                <FaFlag />
+              </NavLinkMobile>
+            )}
 
             <Divider my="sm" />
           </>

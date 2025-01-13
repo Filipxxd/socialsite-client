@@ -1,20 +1,23 @@
 import { useState } from "react";
 import { Avatar, Text, Button, Group, Paper, Flex } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
-import { FaRegCommentDots, FaFlag } from "react-icons/fa";
+import { FaRegCommentDots } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa6";
 import styles from './Post.module.css';
 import { PostResponse } from "../../../_api/posts.api.ts";
 import PostComments from "../../comments/components/PostComments.tsx";
 import { getPathOrNull } from "../../../_helpers/file.helper.ts";
 import { formatDate } from "../../../_helpers/date.helper.ts";
-import { FaTrash } from "react-icons/fa6";
+import { CreateReportModal } from "../../reports/components/CreateReportModal.tsx";
+
 
 type PostProps = {
   post: PostResponse;
   postDeleteCallback: (post: PostResponse) => Promise<void>;
+  postUpdateCallback: (updatedPost: PostResponse) => void;
 };
 
-export default function Post({ post, postDeleteCallback }: PostProps) {
+export default function Post({ post, postDeleteCallback, postUpdateCallback }: PostProps) {
   const [commentsOpen, setCommentsOpen] = useState(false);
 
   return (
@@ -34,10 +37,7 @@ export default function Post({ post, postDeleteCallback }: PostProps) {
         </Group>
 
         <Flex>
-          <Button
-            size="sm"
-            variant="subtle"
-            children={<FaFlag />} />
+          {post.isReportable && <CreateReportModal postId={post.postId} callback={() => postUpdateCallback(post)} />}
           {post.isDeletable && (
             <Button
               size="sm"

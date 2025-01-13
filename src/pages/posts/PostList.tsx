@@ -37,6 +37,16 @@ export default function PostsList({userId, onlyCurrentUser, refetchPostsRef}: Po
     setPostsLoading(false);
   }, [page, pageSize, userId, onlyCurrentUser]);
 
+  const handlePostUpdate = (post: PostResponse) => {
+    setPosts((prevPosts) =>
+      prevPosts.map((p) =>
+        p.postId === post.postId
+          ? { ...p, isReportable: false }
+          : p
+      )
+    );
+  };
+
   const handlePostDelete = async (post: PostResponse) => {
     modals.openConfirmModal({
       title: "Delete post",
@@ -72,6 +82,7 @@ export default function PostsList({userId, onlyCurrentUser, refetchPostsRef}: Po
             <Post
               key={post.postId}
               post={post}
+              postUpdateCallback={handlePostUpdate}
               postDeleteCallback={handlePostDelete}
             />
           ))}
