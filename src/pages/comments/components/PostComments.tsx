@@ -15,6 +15,7 @@ import { showErrorToast, showSuccessToast } from "../../../_helpers/toasts.helpe
 import { formatDate } from "../../../_helpers/date.helper.ts";
 import { CommentRequest, CommentResponse, createComment, deleteComment } from "../../../_api/comments.api.ts";
 import { getPathOrNull } from "../../../_helpers/file.helper.ts";
+import NoDataFound from "../../../shared/NoDataFound.tsx";
 
 type PostCommentsProps = {
   commentsInput: CommentResponse[];
@@ -102,7 +103,7 @@ export default function PostComments({ commentsInput, postId }: PostCommentsProp
             <Text mt={4} size="sm">{comment.content}</Text>
           </Box>
         )) : (
-          <Text>No comments to display</Text>
+          <NoDataFound title="No comments yet" />
         )}
       </Box>
       <form onSubmit={form.onSubmit(handleCreateComment)}>
