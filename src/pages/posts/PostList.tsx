@@ -48,7 +48,7 @@ export default function PostsList({userId, onlyCurrentUser, refetchPostsRef}: Po
       onConfirm: async () => {
         await deletePost(post.postId)
           .then(() => {
-            setPosts(posts.filter((p) => p.postId !== post.postId));
+            void fetchPosts();
             showSuccessToast("Post deleted");
           })
           .catch(() => showErrorToast());
