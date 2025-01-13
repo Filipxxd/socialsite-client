@@ -12,7 +12,6 @@ import {
 } from "@mantine/core";
 import { useAuth } from "../../_auth/AuthContext.tsx";
 import {
-  ChatsRoute,
   LoginRoute,
   RegisterRoute,
   FriendsRoute,
@@ -24,7 +23,6 @@ import {
 import { getRefreshToken, removeTokens } from "../../_auth/tokenManager.ts";
 import { logout as apiLogout } from "../../_api/account.api.ts";
 import { FaUserFriends, FaUserCircle, FaFlag } from "react-icons/fa";
-import { IoChatbox } from "react-icons/io5";
 import classes from "./Header.module.css";
 import { showSuccessToast } from "../../_helpers/toasts.helper.ts";
 import { FaUsers } from "react-icons/fa6";
@@ -95,9 +93,9 @@ function Header() {
               <FaUserFriends />
             </NavLinkDesktop>
 
-            <NavLinkDesktop to={ChatsRoute} label="Chats">
+            {/* <NavLinkDesktop to={ChatsRoute} label="Chats">
               <IoChatbox />
-            </NavLinkDesktop>
+            </NavLinkDesktop> */}
 
             {SuperUsers.some(r => role === r) && (
               <NavLinkDesktop to={UserManagerRoute} label="Users">
@@ -165,9 +163,9 @@ function Header() {
               <FaUserFriends />
             </NavLinkMobile>
 
-            <NavLinkMobile to={ChatsRoute} label="Chats">
+            {/* <NavLinkMobile to={ChatsRoute} label="Chats">
               <IoChatbox />
-            </NavLinkMobile>
+            </NavLinkMobile> */}
 
             {SuperUsers.some(r => role === r) && (
               <NavLinkMobile to={UserManagerRoute} label="Users">
