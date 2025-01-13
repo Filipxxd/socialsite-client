@@ -63,7 +63,7 @@ export default function Login() {
           mt="md"
           {...form.getInputProps("password")}
         />
-        <Checkbox label="Remember me" {...form.getInputProps("rememberMe", { type: 'checkbox' })} />
+        <Checkbox label="Remember me" {...form.getInputProps("rememberMe", { type: 'checkbox' })} mt={"md"} />
         <Group mt="md">
           <Button
             type="submit"

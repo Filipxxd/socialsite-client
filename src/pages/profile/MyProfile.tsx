@@ -11,6 +11,7 @@ import {
   Grid,
   Button,
   ActionIcon,
+  Divider,
 } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
 import { FaUpload } from "react-icons/fa";
@@ -180,7 +181,7 @@ const MyProfile = () => {
           </Stack>
         </Grid.Col>
       </Grid>
-
+      <Divider mt={15} />
       <PostsList onlyCurrentUser={true} />
     </Container>
   );

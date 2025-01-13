@@ -77,7 +77,7 @@ export default function PostsList({userId, onlyCurrentUser, refetchPostsRef}: Po
           ))}
         </Flex>
       ) : (
-        <NoDataFound title={"No posts to display"} message={"Try adding some friends"} />
+        <NoDataFound title={"No posts to display"} />
       )}
       <Center>
         <Pagination
