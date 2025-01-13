@@ -158,7 +158,7 @@ const UserManager: React.FC = () => {
   };
 
   return (
-    <Box p={{ base: "xs", md: "md" }}>
+    <Box p={{ base: "xs", md: "md" }} maw={{ base: "90%", md: "70%" }} mx={"auto"}>
       <Stack>
         <TextInput
           placeholder="Search users..."
